@@ -138,7 +138,7 @@ img {
    color: white;
    border: none;
    outline: none;
-   cursor: context-menu;
+   cursor: default;
 }
 .static:active {
    background-color: black;
@@ -149,7 +149,7 @@ img {
    background-color: black;
    color: white;
    border: none;
-   cursor: context-menu;
+   cursor: default;
 
 }
 h1 {
