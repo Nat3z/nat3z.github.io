@@ -1,93 +1,39 @@
-<!DOCTYPE html>
-<html lang ="en-US">
-<head>
-    <body >
-        <style>
+<!DOCTYPE html> 
+<html>
+    <link rel="stylesheet" href="resetStylesheet.css">
+<body> 
+    
+<title>- Home -</title>
+        <header>
+            <p>
+                <button type="button" onclick="hub()">Home</button>
+                <button type="button" onclick="datapack()">Datapacks</button>
+                <button type="button" onclick="shortcut()">Shortcuts</button>
+            </p>
+        </header>
+        <br>
+        <h1 style="color: black; font-size: larger; font-weight: bolder;">UPDATES</h1>
+        <br><br>
+    <p>
+       <button class="static" onclick="news()" style="cursor: pointer;">11/23/20 <br>New Website Overhaul</button>
+    </p>
+<script> 
+    document.addEventListener('contextmenu', event => event.preventDefault());
 
-            body {
-                background-color: black;
-            }
-            #nat3zlogo { 
-                position: relative;
-                display: block;
-                text-align: middle;
-                margin-left: auto;
-                margin-right: auto;
-                text-align: center;
-                width: 45%;
-            }
-            h1 {
-                color: white;
-                font-family: Arial;
-                position: relative;
-                display: block;
-                text-align: center;
-            }
-            h2 {
-                color: white;
-                font-family: Arial;
-                position: relative;
-                display: block;
-                text-align: center;
-            }
-            p {
-                color: white;
-                font-family: Arial;
-                position: relative;
-                display: block;
-                text-align: center;
-                font-size: larger;
-                font-weight: bold;
-            }
-            div {
-                border: 1px solid gray;
-            }
-            #discordicon {
-                position: relative;
-                display: block;
-                text-align: left;
-                margin-left: auto;
-                margin-right: auto;
-                width: 6%;
-            }
-            #copyright {
-                color: white;
-                font-family: Arial;
-                font-size: small;
-                position: relative;
-                display: block;
-                text-align: center;
-            }
+    function datapack() {
+        window.location.replace("./datapack/")
+    }
+    function hub() {
+        window.location.replace("./")
+    }
+    function news() {
+        window.location.replace("./news/overhaul.html")
+    }
+    function shortcut() {
+        window.location.replace("./shortcuts/")
+    }
+    
+</script> 
 
-        </style>
-    </body>
-    <link rel="icon" href="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fpluspng.com%2Fimg-png%2Fminecraft-grass-brick-block-grass-grass-coub-land-783.png&f=1&nofb=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1" /> 
-    <div class="header">
-        <p>
-            
-            <b>Home</b> | <a href="./datapack/">Datapacks</a> | <a href="./template.html">Discord</a>
-
-        </p>
-      </div> 
-    <title>Nat3z | Hompage</title>
-        <img id="nat3zlogo"src="https://i.imgur.com/JTI6y8e.png" alt="Nat3z Website Logo">
-
-
-        <h1>
-            I make Minecraft Datapacks and other Things
-        </h1>
-
-        <div id="Contacts">
-            <h2>
-            Contacts
-            </h2>
-
-            <img id="discordicon" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fnektony.com%2Fwp-content%2Fuploads%2F2019%2F07%2Fdiscord-icon.png&f=1&nofb=1" alt="discordicon">
-        </div>
-
-            <h2 id="copyright">
-                Copyright Nat3z
-            </h2>
-        
-</head>
+</body> 
+</html>
