@@ -1,22 +1,21 @@
 <!DOCTYPE html> 
 <html>
     <link rel="stylesheet" href="../resetStylesheet.css">
-    <meta property="og:url" content="https://nat3z.github.io/">
-    <meta property="og:title" content="Nat3z.github.io">
-    <meta property="og:description" content="Shortcuts Nat3z's Created.">
-    <meta property="og:type" content="website">
-    <meta name="theme-color" content="#1f6db3">
 <body> 
     
 <title>- Home -</title>
-        <header>
+        <header id="theHeader">
             <p>
                 <button type="button" onclick="hub()">Home</button>
                 <button type="button" onclick="datapack()">Datapacks</button>
                 <button type="button" onclick="shortcut()">Shortcuts</button>
             </p>
-        </header><br><br>
-        <h1 style="color: black;">Work In Progress!</h1>
+        </header>
+        <br>
+        <button class="static"><b>Welcome to the Shortcuts Hub!<br>Hey! Welcome to the first ever shortcut I have created! It's called, Authopen!</button>
+        <footer><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+          <button class="static"style="cursor: default; display: block; background-color: white; color: black;">© Nat3z</button>
+        </footer>
 <script> 
 
 //Insert Code Here
@@ -32,8 +31,21 @@ function news() {
     window.location.replace("../news/overhaul.html")
 }
 function shortcut() {
-        window.location.replace("./shortcuts/")
+        window.location.replace("./")
 }
+window.onscroll = function() {headerstick()};
+
+var header = document.getElementById("theHeader");
+
+var sticky = header.offsetTop;
+
+function headerstick() {
+  if (window.pageYOffset > sticky) {
+    header.classList.add("sticky");
+  } else {
+    header.classList.remove("sticky");
+  }
+} 
 </script> 
 
 </body> 

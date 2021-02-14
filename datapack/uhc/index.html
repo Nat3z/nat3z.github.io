@@ -9,7 +9,7 @@
 <body> 
     
 <title>- UHC -</title>
-        <header>
+        <header id="theHeader">
             <p>
                 <button type="button" onclick="hub()">Home</button>
                 <button type="button" onclick="datapack()">Datapacks</button>
@@ -20,6 +20,9 @@
         <p>
            <button class="static"><b>UHC</b><br>The UHC Datapack Allows You To Play The Beloved UHC Gamemode In A Vanilla World! This Means That You Can Play On Realms!<br><br><a href="UHC Datapack Resources (Required).zip" download style=" text-decoration: none;"><h1>Download the Resource Pack</h1></a><a href="uhc.zip" download style=" text-decoration: none;"><h1>Download the Datapack</h1></a></button>
         </p>
+        <footer><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+          <button class="static"style="cursor: default; display: block; background-color: white; color: black;">© Nat3z</button>
+      </footer>
 <script> 
 
 //Insert Code Here
@@ -37,6 +40,19 @@ function news() {
 function shortcut() {
         window.location.replace("../../shortcuts/")
 }
+window.onscroll = function() {headerstick()};
+
+var header = document.getElementById("theHeader");
+
+var sticky = header.offsetTop;
+
+function headerstick() {
+  if (window.pageYOffset > sticky) {
+    header.classList.add("sticky");
+  } else {
+    header.classList.remove("sticky");
+  }
+} 
 </script> 
 
 </body> 

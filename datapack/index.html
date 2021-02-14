@@ -9,19 +9,22 @@
 <body> 
     
 <title>- Datapack -</title>
-        <header>
+        <header id="theHeader">
             <p>
                 <button type="button" onclick="hub()">Home</button>
                 <button type="button" onclick="datapack()">Datapacks</button>
                 <button type="button" onclick="shortcut()">Shortcuts</button>
             </p>
         </header>
+
 <br>
 
 <p>
     <button type="button" class="static" style="cursor: pointer;" onclick="uhc()">UHC</button>
 </p>
-
+        <footer><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            <button class="static"style="cursor: default; display: block; background-color: white; color: black;">© Nat3z</button>
+        </footer>
 <script>
 
 
@@ -43,6 +46,19 @@ function uhc() {
 function shortcut() {
         window.location.replace("../shortcuts/")
 }
+window.onscroll = function() {headerstick()};
+
+var header = document.getElementById("theHeader");
+
+var sticky = header.offsetTop;
+
+function headerstick() {
+  if (window.pageYOffset > sticky) {
+    header.classList.add("sticky");
+  } else {
+    header.classList.remove("sticky");
+  }
+} 
 </script> 
 
 </body> 
