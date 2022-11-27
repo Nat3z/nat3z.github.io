@@ -4,8 +4,8 @@ description: "I redesigned nat3z.github.io from the ground up. This is a changel
 pubDate: 1627126939000
 lastupdated: 1627126939000
 id: "2021-redesign"
-layout: ../../layouts/BlogLayout.astro
 outdated: true
+layout: ../../layouts/BlogLayout.astro
 ---
 
 3rd Website Redesign ahoy! This redesign changes the entire website's setup making it a lot cleaner and accessible with custom fonts and mobile support!
