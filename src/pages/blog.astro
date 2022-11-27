@@ -5,13 +5,13 @@ interface Frontmatter {
 	frontmatter: {
 		title: string
 		description: string
-		published: number
+		pubDate: string
 		id: string
 	}
 }
 // Use Astro.glob() to fetch all posts, and then sort them by date.
 const posts = (await Astro.glob<Frontmatter>('./blog/*.{md,mdx}')).sort(
-	(a, b) => new Date(b.frontmatter.published).valueOf() - new Date(a.frontmatter.published).valueOf()
+	(a, b) => new Date(b.frontmatter.pubDate).valueOf() - new Date(a.frontmatter.pubDate).valueOf()
 );
 ---
 <!DOCTYPE html>

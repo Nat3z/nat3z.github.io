@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import Header from "../components/Header.svelte";
   export let title: string
-  export let published: number
+  export let published: string
   export let lastupdated: number
   export let outdated: boolean
 
@@ -26,7 +26,11 @@ let lastupdatedasdate = new Date(lastupdated)
 <main>
   <div class="importantcontent">
     <h1>{title}</h1>
-    <h2>Published: {new Intl.DateTimeFormat().format(published)}</h2>
+    <h2>Published {new Date(published).toLocaleDateString('en-us', {
+      year: 'numeric',
+      day: 'numeric',
+      month: 'long'
+    })}</h2>
     { #if outdated }
       <div>
         <span class="material-symbols-outlined error">
