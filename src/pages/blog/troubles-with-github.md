@@ -26,7 +26,7 @@ At the end of the day, I decided to use the same Astro action that started this 
 ### Solution
 I *think* this might've been the solution to my problem, in the code for the workflow to build the Astro project, 3 lines of code were commented out by the Astro team, `path`, `node-version`, and `package-manager`. Now, because I love **pnpm**, my project uses pnpm as the package manager, and maybe ***somewhere*** in the action it just fails the build step and instead throws an arbitrary YAML error instead. So, to fix this issue, I changed the workflow to this:
 
-```yml
+```yaml
 name: Github Pages Astro CI
 
 on:

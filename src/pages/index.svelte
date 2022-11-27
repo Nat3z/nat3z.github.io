@@ -93,6 +93,8 @@ import Header from "../components/Header.svelte";
   .langs {
     display: flex;
     justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
     margin-top: 3rem;
     gap: 1rem;

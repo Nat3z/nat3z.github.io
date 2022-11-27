@@ -26,11 +26,11 @@ let lastupdatedasdate = new Date(lastupdated)
 <main>
   <div class="importantcontent">
     <h1>{title}</h1>
-    <h2>Published {new Date(published).toLocaleDateString('en-us', {
+    <h2>Published <time>{new Date(published).toLocaleDateString('en-us', {
       year: 'numeric',
       day: 'numeric',
       month: 'long'
-    })}</h2>
+    })}</time></h2>
     { #if outdated }
       <div>
         <span class="material-symbols-outlined error">
@@ -45,15 +45,15 @@ let lastupdatedasdate = new Date(lastupdated)
 
   <hr>
 
-  <article class="article" bind:this={article}>
+  <article bind:this={article}>
     <slot></slot>
   </article>
 
   <hr>
 
   <div class="article-info">
-    <h1>Last Updated {lastupdatedasdate
-      .toLocaleTimeString([], { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</h1>
+    <h1>Last Updated <time>{lastupdatedasdate
+      .toLocaleTimeString([], { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</time></h1>
   </div>
 </main>
 

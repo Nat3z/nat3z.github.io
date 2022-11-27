@@ -23,6 +23,7 @@ import Header from "../components/Header.svelte";
     align-items: center;
     gap: 3rem;
     flex-direction: row;
+    flex-wrap: wrap;
     margin: auto;
     margin-top: 2rem;
     width: 90%;
@@ -32,12 +33,14 @@ import Header from "../components/Header.svelte";
     :global(section) {
       background-color: rgb(10, 26, 74);
       padding: .5rem .5rem .5rem;
+      max-width: 40rem;
       border-radius: 5px;
 
       :global(h1) {
         text-decoration: none;
         font-family: 'Hind', sans-serif;
         font-size: 2em;
+        width: 90%;
         color: white;
       }
 
