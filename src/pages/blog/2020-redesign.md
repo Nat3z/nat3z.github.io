@@ -1,7 +1,7 @@
 ---
 title: "2020 Redesign"
 description: "I redesigned nat3z.github.io from the ground up. This is the changelog."
-published: 1593247703000
+pubDate: 1593247703000
 lastupdated: 1593247703000
 id: "2020-redesign"
 outdated: true

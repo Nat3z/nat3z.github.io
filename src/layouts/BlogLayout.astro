@@ -10,7 +10,7 @@ import "../styles/Blog.scss"
 	<BaseHead title={frontmatter.title + " @ Nat3z"} description={frontmatter.description} />
 </head>
 <body>
-	<BlogLayout title={frontmatter.title} published={frontmatter.published} lastupdated={frontmatter.lastupdated} outdated={frontmatter.outdated} client:load>
+	<BlogLayout title={frontmatter.title} published={frontmatter.pubDate} lastupdated={frontmatter.lastupdated} outdated={frontmatter.outdated} client:load>
     <slot></slot>
   </BlogLayout>
 </body>

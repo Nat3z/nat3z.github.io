@@ -1,7 +1,7 @@
 ---
 title: "2021 Redesign"
 description: "I redesigned nat3z.github.io from the ground up. This is a changelog of what happened."
-published: 1627126939000
+pubDate: 1627126939000
 lastupdated: 1627126939000
 id: "2021-redesign"
 layout: ../../layouts/BlogLayout.astro
