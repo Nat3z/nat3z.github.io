@@ -1,0 +1,37 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Blog from './blog.svelte'
+interface Frontmatter {
+	frontmatter: {
+		title: string
+		description: string
+		published: number
+		id: string
+	}
+}
+// Use Astro.glob() to fetch all posts, and then sort them by date.
+const posts = (await Astro.glob<Frontmatter>('./blog/*.{md,mdx}')).sort(
+	(a, b) => new Date(b.frontmatter.published).valueOf() - new Date(a.frontmatter.published).valueOf()
+);
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<BaseHead title="Blog List @ Nat3z" description="The list of blogs posted by @Nat3z" />
+</head>
+<body>
+	<main>
+		<Blog client:load>
+			{posts.map(post => 
+				<a href={`/blog/${post.frontmatter.id}`}>
+					<section>
+						<h1>{post.frontmatter.title}</h1>
+						<h2>{post.frontmatter.description}</h2>
+					</section>
+				</a>
+			)}
+		</Blog>
+
+	</main>
+</body>
+</html>
