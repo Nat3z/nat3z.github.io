@@ -20,15 +20,21 @@ jobs:
     - name: Check out your repository using git
       uses: actions/checkout@v2
 
-    - name: Use Node.js 16
-      uses: actions/setup-node@v2
+    - name: Install Node.js
+      uses: actions/setup-node@v3
       with:
-        node-version: '16'
-        cache: 'npm'
+        node-version: 16
+        - uses: pnpm/action-setup@v2
+        
+    - name: Install pnpm
+    id: pnpm-install
+    with:
+      version: 7
+      run_install: false
 
     # Not using npm? Change `npm ci` to `yarn install` or `pnpm i`
     - name: Install dependencies
-      run: pnpm ci
+      run: pnpm install
 
     # Not using npm? Change `npm run build` to `yarn build` or `pnpm run build`
     - name: Build Astro
