@@ -1,10 +1,11 @@
 ---
+layout: ../../layouts/BlogLayout.astro
 title: "2022 Redesign"
 description: "Recently, I redesigned nat3z.github.io from the ground up. This is what happened."
 pubDate: 1669504698379
 lastupdated: 1669504698379
 id: "2022-redesign"
-layout: ../../layouts/BlogLayout.astro
+outdated: false
 ---
 
 Today, I decided it was the annual (not really) redesign of my website, nat3z.github.io! If you didn't know, every year, or whenever I feel it, I redesign my personal website by giving it a bunch of cool new features and redesign the css from the ground up.

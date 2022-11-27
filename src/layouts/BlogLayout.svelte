@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
-import Header from "../components/Header.svelte";
-export let title: string
-export let published: number
-export let lastupdated: number
-export let outdated: boolean
+  import Header from "../components/Header.svelte";
+  export let title: string
+  export let published: number
+  export let lastupdated: number
+  export let outdated: boolean
 
 let article: HTMLElement
 onMount(() => {
