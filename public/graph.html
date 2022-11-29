@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+  </script>
+  <style>
+    body {
+      background-color: rgb(47, 49, 54);
+      color: whitesmoke;
+    }
+  </style>
+</head>
+<body>
+  
+  <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+</body>
+<script defer>
+  const DATA_COUNT = 12;
+  const labels = [];
+  Chart.defaults.global.defaultFontColor = "#d9dadb";
+  for (let i = 0; i < DATA_COUNT; ++i) {
+    labels.push(i.toString());
+  }
+  const datapoints = [/* set datapoints in code */];
+  const data = {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Current Buy Price (Buy Order /per)',
+        data: datapoints,
+        borderColor: "red",
+        fill: true,
+        textColor: "white",
+        tension: 0.4
+      }
+    ]
+  }
+
+  let chart = new Chart("myChart", {
+    type: "line",
+    data: data
+  })
+</script>
+</html>
