@@ -2,9 +2,9 @@
 import Header from "../components/Header.svelte";
 </script>
 
-<main class="bg-[url('/anisync.jpg')] bg-cover slanted-image w-screen">
+<main class="bg-[url('/anisync.jpg')] bg-cover w-screen">
   <div class="backdrop-blur-md">
-    <div class="bg-[url('/precursor_ruins.png')] bg-cover slanted-image">
+    <div class="bg-[url('/precursor_ruins.png')] bg-cover">
       <div class="backdrop-blur-md">
         <div class="bg-[url('/school-trees.jpg')] bg-cover slanted-image">
 
@@ -12,14 +12,14 @@ import Header from "../components/Header.svelte";
             <Header />
             <div class="introduction font-raleway">
               <div>
-                <h1>Let's Build Something</h1>
+                <h1 class="text-4xl sm:text-6xl pt-4 sm:underline">Let's Build Something</h1>
                 <h2 class="text-middle-blue">I'm Natia, an independent full-stack developer
                   who makes large frontend and backend projects!
                 </h2>
               </div>
             </div>
 
-            <div class="backdrop-blur-md p-4 rounded-lg flex gap-4 w-fit flex-col h-fit m-auto shadow-2xl">
+            <div class="backdrop-blur-md m-auto ml-4 mr-4 sm:ml-0 sm:mr-0 p-4 rounded-lg flex gap-4 w-fit flex-col h-fit shadow-2xl">
               <div class="flex flex-row flex-wrap justify-center items-center gap-4">
                 <img src="/golang.png" alt="go" width="130" height="50"/>
                 <img src="/java.png" alt="java" width="40" height="50"/>
@@ -32,7 +32,7 @@ import Header from "../components/Header.svelte";
           </div>
         </div>
 
-        <div class="flex pt-8 items-center flex-col pr-4 pl-4 flex-wrap h-64">
+        <div class="flex pt-8 justify-center items-center flex-col pr-4 pl-4 flex-wrap h-fit pb-16">
           <h1 class="font-raleway text-middle-blue text-center font-extrabold text-4xl md:text-6xl">SkyblockTracker</h1>
           <div class="font-raleway text-2xl flex flex-wrap justify-center items-center gap-2 font-bold text-white">
             The Greatest 
@@ -48,7 +48,7 @@ import Header from "../components/Header.svelte";
     </div>
 
     <div class="flex flex-col justify-center items-center flex-wrap">
-      <div class="flex items-center pt-8 flex-col pr-4 pl-4 flex-wrap h-64">
+      <div class="flex items-center justify-center pt-8 flex-col pr-4 pl-4 flex-wrap h-fit pb-6">
         <h1 class="font-raleway text-middle-blue text-center font-extrabold text-4xl md:text-6xl">AniSync</h1>
         <div class="font-raleway text-2xl flex flex-wrap justify-center items-center gap-2 font-bold text-white">
           <h1>The Anime Syncing Service built for the modern web.</h1>
@@ -73,7 +73,6 @@ import Header from "../components/Header.svelte";
     align-items: center;
     justify-content: center;
     div {
-      width: 70%;
       h1 {
         font-size: 4em;
         text-align: center;
@@ -81,7 +80,7 @@ import Header from "../components/Header.svelte";
         background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 900;
-        text-decoration: underline;
+        line-height: 125%;
         text-decoration-color: rgb(89, 123, 243);
         padding-bottom: 0.2em;
         margin-bottom: -0.2em;
