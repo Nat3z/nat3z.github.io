@@ -24,9 +24,9 @@ const posts = (await Astro.glob<Frontmatter>('./blog/*.{md,mdx}')).sort(
 		<Blog client:load>
 			{posts.map(post => 
 				<a href={`/blog/${post.frontmatter.id}`}>
-					<section>
-						<h1>{post.frontmatter.title}</h1>
-						<h2>{post.frontmatter.description}</h2>
+					<section class="bg-oxford-blue rounded-lg p-4">
+						<h1 class="font-raleway font-extrabold text-3xl text-middle-blue">{post.frontmatter.title}</h1>
+						<h2 class="text-pacific-blue">{post.frontmatter.description}</h2>
 					</section>
 				</a>
 			)}

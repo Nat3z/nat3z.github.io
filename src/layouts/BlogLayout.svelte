@@ -25,8 +25,8 @@ let lastupdatedasdate = new Date(lastupdated)
 <Header />
 <main>
   <div class="importantcontent">
-    <h1>{title}</h1>
-    <h2>Published <time>{new Date(published).toLocaleDateString('en-us', {
+    <h1 class="font-extrabold">{title}</h1>
+    <h2 class="font-bold -mt-4 mb-4">Published <time>{new Date(published).toLocaleDateString('en-us', {
       year: 'numeric',
       day: 'numeric',
       month: 'long'
@@ -43,23 +43,27 @@ let lastupdatedasdate = new Date(lastupdated)
 
   </div>
 
-  <hr>
+  <hr class="mb-4">
 
   <article bind:this={article}>
     <slot></slot>
   </article>
 
-  <hr>
+  <hr class="mt-4">
 
-  <div class="article-info">
+  <div class="mt-2 font-bold">
     <h1>Last Updated <time>{lastupdatedasdate
       .toLocaleTimeString([], { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</time></h1>
   </div>
 </main>
 
 <style lang="scss">
-  
+
   main {
+    height: 100%;
+
+    margin-bottom: 5rem;
+
     color: rgb(206, 206, 206);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     

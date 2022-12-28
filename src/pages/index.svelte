@@ -2,49 +2,66 @@
 import Header from "../components/Header.svelte";
 </script>
 
-<Header />
+<main class="bg-[url('/anisync.jpg')] bg-cover slanted-image w-screen">
+  <div class="backdrop-blur-md">
+    <div class="bg-[url('/precursor_ruins.png')] bg-cover slanted-image">
+      <div class="backdrop-blur-md">
+        <div class="bg-[url('/school-trees.jpg')] bg-cover slanted-image">
 
-<div class="introduction">
-  <div>
-    <h1>Let's Build Something</h1>
-    <h2>Hey there! I'm Natia, an independent full-stack developer
-      who makes everything from Minecraft Mods, to large frontend and backend projects!
-    </h2>
-  </div>
-  
-  <span>
-    <img src="/originalavatar.png" width="150" height="150" alt="michiru" />
-  </span>
-</div>
+          <div class="backdrop-blur-md flex flex-col justify-center items-center flex-wrap pb-72">
+            <Header />
+            <div class="introduction font-raleway">
+              <div>
+                <h1>Let's Build Something</h1>
+                <h2 class="text-middle-blue">I'm Natia, an independent full-stack developer
+                  who makes large frontend and backend projects!
+                </h2>
+              </div>
+            </div>
 
-<h1 class="spacedtext">LANGUAGES I KNOW</h1>
-<div class="langs">
-  <img src="/golang.png" alt="go" width="130" height="50"/>
-  <img src="/java.png" alt="java" width="40" height="50"/>
-  <img src="/kotlin.png" alt="kotlin" width="50" height="50"/>
-  <img src="/typescript.png" alt="ts" width="50" height="50" />
-  <img src="/cs.png" alt="csharp" width="45" height="50" />
-</div>
+            <div class="backdrop-blur-md p-4 rounded-lg flex gap-4 w-fit flex-col h-fit m-auto shadow-2xl">
+              <div class="flex flex-row flex-wrap justify-center items-center gap-4">
+                <img src="/golang.png" alt="go" width="130" height="50"/>
+                <img src="/java.png" alt="java" width="40" height="50"/>
+                <img src="/kotlin.png" alt="kotlin" width="50" height="50"/>
+                <img src="/typescript.png" alt="ts" width="50" height="50" />
+                <img src="/cs.png" alt="csharp" width="45" height="50" />
+              </div>
+            </div>
 
-<h1 class="spacedtext" style="margin-top: 3rem;">PROJECTS</h1>
-<div class="projects">
-  <a href="https://github.com/nat3z/osuautodeafen">
-    <div>
-      <img alt="logo" src="/osuautodeafen.png" class="logo" width="150" height="150"/>
-      <section>
-        <h1>osu! Auto Deafen</h1>
-        <h2>osu! Auto Deafen gives users an easy-to-use system for auto deafening you on Discord whenever you're about to FC a map.</h2>
-        <span class="bottom">
-          <h1>WRITTEN IN</h1>
-          <img src="/golang.png" alt="go" width="70" height="25"/>
-        </span>
-      </section>
+          </div>
+        </div>
+
+        <div class="flex pt-8 items-center flex-col pr-4 pl-4 flex-wrap h-64">
+          <h1 class="font-raleway text-middle-blue text-center font-extrabold text-4xl md:text-6xl">SkyblockTracker</h1>
+          <div class="font-raleway text-2xl flex flex-wrap justify-center items-center gap-2 font-bold text-white">
+            The Greatest 
+            <h1 class="underline text-blue-400">Free-To-Use</h1>
+            Hypixel Skyblock 
+            <h1 class="underline text-amber-500">Bazaar</h1>
+            and
+            <h1 class="underline text-red-500">Auction House</h1>
+            Tracking Website
+          </div>
+        </div>
+      </div>
     </div>
-  </a>
-</div>
+
+    <div class="flex flex-col justify-center items-center flex-wrap">
+      <div class="flex items-center pt-8 flex-col pr-4 pl-4 flex-wrap h-64">
+        <h1 class="font-raleway text-middle-blue text-center font-extrabold text-4xl md:text-6xl">AniSync</h1>
+        <div class="font-raleway text-2xl flex flex-wrap justify-center items-center gap-2 font-bold text-white">
+          <h1>The Anime Syncing Service built for the modern web.</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
 <style lang="scss">
   h1, h2 {
-    color: whitesmoke;
+    // color: whitesmoke;
     font-family: 'Nunito Sans', sans-serif;
   }
 
@@ -54,19 +71,23 @@ import Header from "../components/Header.svelte";
     margin: auto;
     margin-top: 3rem;
     align-items: center;
-    margin-bottom: 10rem;
+    justify-content: center;
     div {
       width: 70%;
       h1 {
-        font-size: 3em;
+        font-size: 4em;
+        text-align: center;
         background: -webkit-linear-gradient(rgb(89, 123, 243), rgb(33, 73, 194));
         background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-family: sans-serif;
+        font-weight: 900;
+        text-decoration: underline;
+        text-decoration-color: rgb(89, 123, 243);
         padding-bottom: 0.2em;
         margin-bottom: -0.2em;
       }
       h2 {
+        text-align: center;
         margin-top: 1rem;
         font-size: 1.5em;
       }

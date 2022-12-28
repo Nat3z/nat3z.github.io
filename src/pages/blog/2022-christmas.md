@@ -2,7 +2,7 @@
 layout: ../../layouts/BlogLayout.astro
 title: "Merry Christmas!"
 description: "Christmas time is here! Let's talk about what happened this past months."
-published: Nov 26 2022
+published: Dec 26 2022
 lastupdated: 1671948287330
 id: "2022-christmas"
 outdated: false

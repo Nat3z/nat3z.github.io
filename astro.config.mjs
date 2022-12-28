@@ -8,7 +8,10 @@ import svelte from "@astrojs/svelte";
 // https://astro.build/config
 
 // https://astro.build/config
+import tailwind from "@astrojs/tailwind";
+
+// https://astro.build/config
 export default defineConfig({
-  site: 'https://nat3z.github.io/',
-  integrations: [mdx(), sitemap(), svelte()]
+  site: 'https://www.nat3z.com',
+  integrations: [mdx(), sitemap(), svelte(), tailwind()]
 });
