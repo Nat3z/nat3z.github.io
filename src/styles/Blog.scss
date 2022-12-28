@@ -7,11 +7,20 @@ article {
     font-weight: 700;
   }
 
+  a {
+    text-decoration: underline;
+  }
+
   h2 {
     margin-top: .5rem;
     margin-bottom: .5rem;
     font-size: 25px;
     font-weight: 600;
+  }
+
+  li {
+    list-style-type: circle;
+    list-style-position: inside;
   }
 
   h3 {

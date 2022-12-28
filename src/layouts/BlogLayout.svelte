@@ -32,7 +32,7 @@ let lastupdatedasdate = new Date(lastupdated)
       month: 'long'
     })}</time></h2>
     { #if outdated }
-      <div>
+      <div class="flex justify-center items-center mb-4">
         <span class="material-symbols-outlined error">
           error
         </span>
@@ -51,7 +51,7 @@ let lastupdatedasdate = new Date(lastupdated)
 
   <hr class="mt-4">
 
-  <div class="mt-2 font-bold">
+  <div class="mt-2 font-bold italic">
     <h1>Last Updated <time>{lastupdatedasdate
       .toLocaleTimeString([], { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true })}</time></h1>
   </div>
