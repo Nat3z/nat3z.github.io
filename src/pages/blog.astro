@@ -27,7 +27,7 @@ const posts = (await Astro.glob<Frontmatter>('./blog/*.{md,mdx}')).sort(
 		<Blog client:load>
 			{posts.map(post => 
 				<a href={`/blog/${post.frontmatter.id}`}>
-					<section class="bg-oxford-blue rounded-lg w-9/12 sm:w-full m-auto flex-col relative mb-2">
+					<section class="bg-oxford-blue rounded-lg w-9/12 sm:w-96 m-auto flex-col relative mb-2">
 						{ post.frontmatter.outdated && 
 							<div class="rounded-t-lg flex flex-row gap-2 justify-center items-center p-2 absolute right-4 top-3">
 								<span class="material-symbols-outlined text-red-500">
