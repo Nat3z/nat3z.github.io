@@ -33,11 +33,11 @@ let lastupdatedasdate = new Date(lastupdated)
       month: 'long'
     })}</time></h2>
     { #if outdated }
-      <div class="flex justify-center items-center flex-row mb-4">
+      <div class="flex justify-center items-center flex-row mb-4 gap-4">
         <span class="material-symbols-outlined error">
           error
         </span>
-        <h6 class="text-red-500 font-mono">This is an outdated article. Please refer to the latest version of this topic for accurate information.</h6>
+        <h6 class="text-red-500 font-mono text-sm sm:text-lg">This is an outdated article.</h6>
       </div>
     {/if}
     <div class="flex-row flex-wrap gap-2 ml-auto mb-2">
