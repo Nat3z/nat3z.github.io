@@ -3,8 +3,9 @@
   import Header from "../components/Header.svelte";
   export let title: string
   export let published: string
-  export let lastupdated: number
+  export let lastupdated: string
   export let outdated: boolean
+  export let tags: string[]
 
 let article: HTMLElement
 onMount(() => {
@@ -32,14 +33,18 @@ let lastupdatedasdate = new Date(lastupdated)
       month: 'long'
     })}</time></h2>
     { #if outdated }
-      <div class="flex justify-center items-center mb-4">
+      <div class="flex justify-center items-center flex-row mb-4">
         <span class="material-symbols-outlined error">
           error
         </span>
-        <h3>This is an outdated article. Please refer to the latest version of this topic for accurate information.</h3>
+        <h6 class="text-red-500 font-mono">This is an outdated article. Please refer to the latest version of this topic for accurate information.</h6>
       </div>
     {/if}
-
+    <div class="flex-row flex-wrap gap-2 ml-auto mb-2">
+      { #each tags as tag }
+        <p class="text-pacific-blue font-raleway bg-oxford-blue p-2 rounded-lg text-sm">#{tag}</p>
+      {/each}
+    </div>
 
   </div>
 
@@ -58,7 +63,12 @@ let lastupdatedasdate = new Date(lastupdated)
 </main>
 
 <style lang="scss">
-
+  // if screen is the size of an iPhone 10 or smaller, make main's width 100%
+  @media only screen and (max-width: 812px) {
+    main {
+      width: 90% !important;
+    }
+  }
   main {
     height: 100%;
 
@@ -66,7 +76,6 @@ let lastupdatedasdate = new Date(lastupdated)
 
     color: rgb(206, 206, 206);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    
     width: 70%;
     display: block;
     padding: 1rem 1rem 1rem;

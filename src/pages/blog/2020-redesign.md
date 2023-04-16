@@ -3,7 +3,8 @@ layout: ../../layouts/BlogLayout.astro
 title: "2020 Redesign"
 description: "I redesigned nat3z.github.io from the ground up. This is the changelog."
 published: Oct 15 2020
-lastupdated: 1593247703000
+lastupdated: Sat Jun 27 2020 01:48:23
+tags: [ "Redesign" ]
 id: "2020-redesign"
 outdated: true
 ---

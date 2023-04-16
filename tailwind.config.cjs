@@ -8,6 +8,7 @@ module.exports = {
 				"pacific-blue": "#08A4BD",
 				"undermarine-blue": "#446DF6",
 				"oxford-blue": "#01172F",
+				"light-oxford-blue": "#011e3d",
 				"dark-sienna": "#4C212A",
 				"middle-blue": "rgb(137 210 220)"
 			},

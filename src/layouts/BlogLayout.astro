@@ -10,7 +10,7 @@ import "../styles/Blog.scss"
 	<BaseHead title={`${content.title} @ Nat3z`} description={content.description} />
 </head>
 <body>
-	<BlogLayout title={content.title} published={content.published} lastupdated={content.lastupdated} outdated={content.outdated} client:load>
+	<BlogLayout title={content.title} published={content.published} tags={content.tags || []} lastupdated={content.lastupdated} outdated={content.outdated} client:load>
     <slot></slot>
   </BlogLayout>
 </body>

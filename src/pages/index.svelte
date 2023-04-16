@@ -1,62 +1,56 @@
 <script lang="ts">
 import Header from "../components/Header.svelte";
 </script>
-
-<main class="bg-[url('/anisync.jpg')] bg-cover w-screen">
-  <div class="backdrop-blur-md">
-    <div class="bg-[url('/precursor_ruins.png')] bg-cover">
-      <div class="backdrop-blur-md">
-        <div class="bg-[url('/school-trees.jpg')] bg-cover slanted-image">
-
-          <div class="backdrop-blur-md flex flex-col justify-center items-center flex-wrap pb-72">
-            <Header />
-            <div class="introduction font-raleway">
-              <div>
-                <h1 class="text-4xl sm:text-6xl pt-4 sm:underline">Let's Build Something</h1>
-                <h2 class="text-middle-blue">I'm Natia, an independent full-stack developer
-                  who makes large frontend and backend projects!
-                </h2>
-              </div>
-            </div>
-
-            <div class="backdrop-blur-md m-auto ml-4 mr-4 sm:ml-0 sm:mr-0 p-4 rounded-lg flex gap-4 w-fit flex-col h-fit shadow-2xl">
-              <div class="flex flex-row flex-wrap justify-center items-center gap-4">
-                <img src="/golang.png" alt="go" width="130" height="50"/>
-                <img src="/java.png" alt="java" width="40" height="50"/>
-                <img src="/kotlin.png" alt="kotlin" width="50" height="50"/>
-                <img src="/typescript.png" alt="ts" width="50" height="50" />
-                <img src="/cs.png" alt="csharp" width="45" height="50" />
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <div class="flex pt-8 justify-center items-center flex-col pr-4 pl-4 flex-wrap h-fit pb-16">
-          <h1 class="font-raleway text-middle-blue text-center font-extrabold text-4xl md:text-6xl">SkyblockTracker</h1>
-          <div class="font-raleway text-2xl flex flex-wrap justify-center items-center gap-2 font-bold text-white">
-            The Greatest 
-            <h1 class="underline text-blue-400">Free-To-Use</h1>
-            Hypixel Skyblock 
-            <h1 class="underline text-amber-500">Bazaar</h1>
-            and
-            <h1 class="underline text-red-500">Auction House</h1>
-            Tracking Website
-          </div>
-        </div>
-      </div>
-    </div>
-
+<main class="bg-[url('/school-trees.jpg')] bg-cover w-screen h-screen">
+  <div class="backdrop-blur-md h-screen">
     <div class="flex flex-col justify-center items-center flex-wrap">
-      <div class="flex items-center justify-center pt-8 flex-col pr-4 pl-4 flex-wrap h-fit pb-6">
-        <h1 class="font-raleway text-middle-blue text-center font-extrabold text-4xl md:text-6xl">AniSync</h1>
-        <div class="font-raleway text-2xl flex flex-wrap justify-center items-center gap-2 font-bold text-white">
-          <h1>The Anime Syncing Service built for the modern web.</h1>
+      <Header />
+      <div class="introduction font-raleway">
+        <div>
+          <h1 class="text-4xl sm:text-6xl pt-4 sm:underline">
+            Hi, I'm Natia!
+          </h1>
+          <h2 class="text-middle-blue">an independent full-stack developer
+            who makes large frontend and backend projects!
+          </h2>
         </div>
       </div>
+  
+      <div class="flex flex-wrap flex-row justify-center items-center gap-2 relative h-fit w-fit">
+        <div class="backdrop-blur-md m-auto ml-4 mr-4 sm:ml-0 sm:mr-0 p-4 rounded-lg flex gap-4 w-full sm:w-fit flex-col h-full shadow-2xl">
+          <h1 class="text-4xl text-middle-blue">Languages I ❤️</h1>
+          <div class="flex flex-row flex-wrap justify-center items-center gap-4">
+            <img src="/rust.png" alt="rust" width="50" height="50"/>
+            <img src="/java.png" alt="java" width="40" height="50"/>
+            <img src="/kotlin.png" alt="kotlin" width="50" height="50"/>
+            <img src="/typescript.png" alt="ts" width="50" height="50" />
+            <img src="/cs.png" alt="csharp" width="45" height="50" />
+          </div>
+        </div>
+    
+        <div class="backdrop-blur-md text-middle-blue m-auto ml-4 mr-4 sm:ml-0 sm:mr-0 p-4 rounded-lg flex gap-4 w-full sm:w-fit flex-col h-fit shadow-2xl mt-4">
+          <h1 class="text-4xl">Links //</h1>
+          <div class="flex flex-row flex-wrap justify-start items-start gap-4">
+            <a href="https://github.com/Nat3z/" target="_blank" rel="noreferrer" class="hover:underline flex flex-row gap-2 justify-center items-center">
+              <img src="/github.png" alt="github" width="50" height="50"/>
+              <h1 class="text-2xl">@Nat3z</h1>
+            </a>
+            <a href="https://schedule.nat3z.com/" target="_blank" rel="noreferrer" class="hover:underline flex flex-row gap-2 items-center justify-center">
+              <img src="/dynschedule.png" alt="Dynschedule" width="50" height="50"/>
+              <h1 class="text-2xl">Dynschedule</h1>
+            </a>
+            <a href="https://en.pronouns.page/@natia" target="_blank" rel="noreferrer" class="hover:underline flex flex-row gap-2 items-center justify-center">
+              <img src="/pronouns.png" alt="Pronouns.page" width="50" height="50"/>
+              <h1 class="text-2xl">@natia</h1>
+            </a>
+          </div>
+        </div>
+      </div>
+  
+  
+  
     </div>
-  </div>
-
+  </div> 
 </main>
 
 <style lang="scss">
@@ -69,7 +63,6 @@ import Header from "../components/Header.svelte";
     display: flex;
     width: 70%;
     margin: auto;
-    margin-top: 3rem;
     align-items: center;
     justify-content: center;
     div {

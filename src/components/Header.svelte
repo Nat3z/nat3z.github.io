@@ -12,11 +12,12 @@
 <style lang="scss">
 :root {
   --rgb-navbar: rgb(15, 38, 107);
-  --mr-orange: rgb(255, 73, 3);
+  --dark-navbar: rgb(13, 32, 92);
+  --mr-orange: #08A4BD;
 }
 
 nav {
-  background-color: rgb(12, 33, 96);
+  background-color: var(--dark-navbar);
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -56,7 +57,7 @@ nav span {
   padding: 1.3em 1.3em 1.3em;
   border-radius: 150px;
 
-  background-color: rgb(19, 47, 133);
+  background-color: var(--rgb-navbar);
 }
 nav span a {
   outline: none;

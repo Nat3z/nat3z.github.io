@@ -3,8 +3,9 @@ layout: ../../layouts/BlogLayout.astro
 title: "Troubles with Github Pages"
 description: "Today, I deployed an Astro site to Github Pages. Here's what happened."
 published: Nov 26 2022
-lastupdated: 1669532413165
+lastupdated: Sat Nov 26 2022 23:00:13
 id: "troubles-with-github"
+tags: [ "Github" ]
 outdated: false
 ---
 I just want to get it straight, Astro is an amazing tool. It excels in many things and does what it is required to do. However, I just had a horrible experience with Astro and deployment with Github Actions and I would like to rant about it a bit.
