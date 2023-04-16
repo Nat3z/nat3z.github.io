@@ -1,8 +1,8 @@
 <script lang="ts">
 import Header from "../components/Header.svelte";
 </script>
-<main class="bg-[url('/school-trees.jpg')] bg-cover w-screen h-screen">
-  <div class="backdrop-blur-md h-screen">
+<main class="bg-[url('/school-trees.jpg')] bg-cover w-screen h-full">
+  <div class="backdrop-blur-md h-full sm:h-screen">
     <div class="flex flex-col justify-center items-center flex-wrap">
       <Header />
       <div class="introduction font-raleway">
