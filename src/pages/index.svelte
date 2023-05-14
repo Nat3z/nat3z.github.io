@@ -28,7 +28,7 @@ import Header from "../components/Header.svelte";
           </div>
         </div>
     
-        <div class="backdrop-blur-md text-middle-blue m-auto ml-4 mr-4 sm:ml-0 sm:mr-0 p-4 rounded-lg flex gap-4 w-full sm:w-fit flex-col h-fit shadow-2xl mt-4">
+        <div class="backdrop-blur-md text-middle-blue m-auto ml-4 mr-4 sm:ml-0 sm:mr-0 p-4 rounded-lg flex gap-4 w-full sm:w-fit flex-col h-fit shadow-2xl">
           <h1 class="text-4xl">Links //</h1>
           <div class="flex flex-row flex-wrap justify-start items-start gap-4">
             <a href="https://github.com/Nat3z/" target="_blank" rel="noreferrer" class="hover:underline flex flex-row gap-2 justify-center items-center">

@@ -23,6 +23,19 @@ article {
     list-style-position: inside;
   }
 
+  blockquote {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    border-left: 3px solid rgb(89, 123, 243);
+    border-radius: 5px;
+    background-color: rgb(10, 26, 74);
+    color: whitesmoke;
+  }
+
   h3 {
     margin-top: .5rem;
     margin-bottom: .5rem;
@@ -62,6 +75,13 @@ article {
     padding-left: 2px;
     padding-right: 2px;
     overflow-wrap: break-word;
+  }
+  img {
+    margin-top: 5px;
+    padding: 5px 5px 5px;
+    border: 2px solid rgb(8, 20, 58);
+    border-radius: 5px;
+    
   }
 
   .astro-code code {
