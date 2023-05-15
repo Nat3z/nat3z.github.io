@@ -8,7 +8,7 @@ import Header from "../components/Header.svelte";
       <div class="introduction font-raleway">
         <div>
           <h1 class="text-4xl sm:text-6xl pt-4 sm:underline">
-            Hi, I'm Natia!
+            Hi, I'm Nat3z!
           </h1>
           <h2 class="text-middle-blue">an independent full-stack developer
             who makes large frontend and backend projects!
@@ -39,10 +39,7 @@ import Header from "../components/Header.svelte";
               <img src="/dynschedule.png" alt="Dynschedule" width="50" height="50"/>
               <h1 class="text-2xl">Dynschedule</h1>
             </a>
-            <a href="https://en.pronouns.page/@natia" target="_blank" rel="noreferrer" class="hover:underline flex flex-row gap-2 items-center justify-center">
-              <img src="/pronouns.png" alt="Pronouns.page" width="50" height="50"/>
-              <h1 class="text-2xl">@natia</h1>
-            </a>
+            
           </div>
         </div>
       </div>
