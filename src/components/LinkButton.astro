@@ -1,0 +1,26 @@
+---
+export interface Props {
+  href: string;
+  text: string;
+  icon?: string;
+  target?: string;
+  buttonClass?: string;
+  linkClass?: string;
+}
+
+const {
+  href,
+  text,
+  icon = "/open_in_new.svg",
+  target = "_blank",
+  buttonClass = "font-analogue text-lg hover:bg-teal/75 px-4",
+  linkClass = "flex flex-row items-center justify-center gap-2",
+} = Astro.props;
+---
+
+<button class={buttonClass}>
+  <a href={href} target={target} class={linkClass}>
+    {icon && <img src={icon} alt="Icon" class="w-5 h-5" />}
+    <p class="font-analogue text-lg relative top-0.5">{text}</p>
+  </a>
+</button>

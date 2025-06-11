@@ -1,0 +1,122 @@
+---
+import Tooltip from "./Tooltip.astro";
+import Content from "./Content.astro";
+import TooltipContent from "./TooltipContent.astro";
+
+interface Props {
+  title: string;
+  items: (string | string[])[];
+  searchPlaceholder?: string;
+  searchTooltip?: string;
+  id: string;
+}
+
+const {
+  title,
+  items,
+  searchPlaceholder = "Search...",
+  searchTooltip = "Search through items",
+  id,
+} = Astro.props;
+---
+
+<div
+  class="flex flex-col justify-start items-stretch h-48 max-h-64 overflow-y-auto"
+>
+  <p class="font-analogue text-center text-lg w-full mb-2">{title}</p>
+  <div class="flex flex-col justify-center items-center w-full">
+    <Tooltip
+      position="top"
+      offset={{ x: 0, y: 10 }}
+      wrapperClass="w-11/12 relative"
+      tooltipClass="text-center w-max"
+    >
+      <Content slot="content">
+        <div
+          class="relative flex flex-row justify-center items-center w-11/12 gap-2"
+        >
+          <img src="/search_icon.svg" alt="Search" class="w-4 h-4 relative" />
+          <input
+            type="text"
+            id={`${id}Search`}
+            placeholder={searchPlaceholder}
+            class="w-full font-analogue border-light-gray border-b-2 outline-none"
+          />
+        </div>
+      </Content>
+      <TooltipContent slot="tooltip">
+        <p class="text-center w-full">
+          {searchTooltip}
+        </p>
+      </TooltipContent>
+    </Tooltip>
+  </div>
+  <div class="w-full overflow-y-auto h-48">
+    <p
+      id={`${id}NoResults`}
+      class="font-analogue text-center text-lg w-full mb-2 hidden"
+    >
+      No matching items found
+    </p>
+    <ul
+      id={`${id}List`}
+      class="font-analogue text-start list-disc text-lg w-full px-6 grid grid-cols-1 sm:grid-cols-2 gap-y-1 gap-x-8"
+    >
+      {
+        items.map((item, index) =>
+          item instanceof Array ? (
+            <li
+              class="break-words item"
+              data-index={index}
+              data-keywords={item.join(" ").toLowerCase()}
+              data-section={id}
+            >
+              {item[0]}
+            </li>
+          ) : (
+            <li
+              class="break-words item"
+              data-index={index}
+              data-keywords={item.toLowerCase()}
+              data-section={id}
+            >
+              {item}
+            </li>
+          )
+        )
+      }
+    </ul>
+  </div>
+</div>
+
+<script define:vars={{ id }}>
+  const searchInput = document.getElementById(`${id}Search`);
+  const noResults = document.getElementById(`${id}NoResults`);
+  const itemElements = document.querySelectorAll(`[data-section="${id}"]`);
+
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      const searchTerm = e.target.value.toLowerCase().trim();
+      let visibleCount = 0;
+
+      itemElements.forEach((item) => {
+        const keywords = item.getAttribute("data-keywords");
+        const matches = keywords.includes(searchTerm);
+
+        if (matches || searchTerm === "") {
+          item.style.display = "";
+          visibleCount++;
+        } else {
+          item.style.display = "none";
+        }
+      });
+
+      // Show/hide no results message
+      if (searchTerm !== "" && visibleCount === 0) {
+        noResults.classList.remove("hidden");
+      } else {
+        noResults.classList.add("hidden");
+      }
+    });
+  }
+</script>

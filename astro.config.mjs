@@ -1,17 +1,20 @@
+// @ts-check
 import { defineConfig } from 'astro/config';
-import mdx from '@astrojs/mdx';
-import sitemap from '@astrojs/sitemap';
 
-// https://astro.build/config
-import svelte from "@astrojs/svelte";
+import tailwindcss from '@tailwindcss/vite';
 
-// https://astro.build/config
-
-// https://astro.build/config
-import tailwind from "@astrojs/tailwind";
+import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://www.nat3z.com',
-  integrations: [mdx(), sitemap(), svelte(), tailwind()]
+  vite: {
+    plugins: [tailwindcss()]
+  },
+
+  adapter: vercel({
+    isr: {
+      bypassToken: "0023403204032403204abfw",
+      expiration: 60 * 60, // 1 hour in seconds
+    }
+  })
 });

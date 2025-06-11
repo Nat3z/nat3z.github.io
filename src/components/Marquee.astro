@@ -1,0 +1,167 @@
+---
+export interface Props {
+  text?: string;
+  images?: string[];
+  speed?: number;
+  className?: string;
+  imageClassName?: string;
+  imageAlt?: string;
+}
+
+const { text, images, speed = 50, className = "", imageClassName = "", imageAlt = "Marquee image" } = Astro.props;
+const marqueeId = `marquee-${Math.random().toString(36).substr(2, 9)}`;
+const hasContent = text || (images && images.length > 0);
+---
+
+{hasContent && (
+  <div class={`marquee-container ${className}`} data-marquee-id={marqueeId}>
+    <div class="marquee-content">
+      <!-- Text content -->
+      {text && (
+        <>
+          <span class="marquee-text">{text}</span>
+          <span class="marquee-text">{text}</span>
+        </>
+      )}
+      
+      <!-- Image content -->
+      {images && images.length > 0 && (
+        <>
+          <div class="marquee-images">
+            {images.map((image) => (
+              <img src={image} alt={imageAlt} class={`marquee-image ${imageClassName}`} />
+            ))}
+          </div>
+          <div class="marquee-images">
+            {images.map((image) => (
+              <img src={image} alt={imageAlt} class={`marquee-image ${imageClassName}`} />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  </div>
+)}
+
+<style define:vars={{ speed: `${speed}s` }}>
+  .marquee-container {
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 31px;
+  }
+
+  .marquee-content {
+    display: inline-flex;
+    animation: marquee var(--speed) linear infinite;
+    will-change: transform;
+  }
+
+  .marquee-text {
+    padding-right: 2rem;
+    display: inline-block;
+  }
+
+  .marquee-images {
+    display: inline-flex;
+    gap: 0.75rem;
+    padding-right: 1.5rem;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .marquee-image {
+    display: block;
+    height: auto;
+    max-height: 31px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  @keyframes marquee {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Pause animation on hover */
+  .marquee-container:hover .marquee-content {
+    animation-play-state: paused;
+  }
+</style>
+
+<script define:vars={{ marqueeId }}>
+  document.addEventListener("DOMContentLoaded", () => {
+    const container = document.querySelector(
+      `[data-marquee-id="${marqueeId}"]`
+    );
+    const content = container?.querySelector(".marquee-content");
+    const text = container?.querySelector(".marquee-text");
+    const images = container?.querySelector(".marquee-images");
+
+    function checkAndSetAnimation() {
+      if (container && content) {
+        // Check if content overflows container
+        const containerWidth = container.offsetWidth;
+        let contentWidth = 0;
+
+        if (text) {
+          contentWidth = text.offsetWidth;
+        } else if (images) {
+          contentWidth = images.offsetWidth;
+        }
+
+        if (contentWidth <= containerWidth) {
+          // Content fits, no need to animate
+          content.style.animation = "none";
+          content.style.justifyContent = "center";
+        } else {
+          // Content overflows, ensure animation is running
+          content.style.animation = "";
+          content.style.justifyContent = "";
+        }
+      }
+    }
+
+    if (container && content) {
+      // If we have images, wait for them to load before checking
+      if (images) {
+        const imageElements = images.querySelectorAll('img');
+        let loadedImages = 0;
+        const totalImages = imageElements.length;
+
+        if (totalImages === 0) {
+          checkAndSetAnimation();
+          return;
+        }
+
+        function onImageLoad() {
+          loadedImages++;
+          if (loadedImages === totalImages) {
+            // Small delay to ensure layout is complete
+            setTimeout(checkAndSetAnimation, 100);
+          }
+        }
+
+        imageElements.forEach(img => {
+          if (img.complete) {
+            onImageLoad();
+          } else {
+            img.addEventListener('load', onImageLoad);
+            img.addEventListener('error', onImageLoad); // Handle broken images
+          }
+        });
+      } else {
+        // For text content, check immediately
+        checkAndSetAnimation();
+      }
+    }
+  });
+</script>
+

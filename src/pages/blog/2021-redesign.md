@@ -12,6 +12,7 @@ outdated: true
 3rd Website Redesign ahoy! This redesign changes the entire website's setup making it a lot cleaner and accessible with custom fonts and mobile support!
 
 With this new update, the following changes have applied.
+
 * Menu Navigation
 * Twitter Feed Embedded
 * Created a header that isn't just a bunch of buttons

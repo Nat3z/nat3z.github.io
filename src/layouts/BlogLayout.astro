@@ -1,17 +1,365 @@
 ---
-import BaseHead from "../components/BaseHead.astro"
-import BlogLayout from "./BlogLayout.svelte"
-const { content } = Astro.props
-import "../styles/Blog.scss"
+import Layout from "../components/Layout.astro";
+import Header from "../components/Header.astro";
+import Card from "../components/Card.astro";
+import Tooltip from "../components/Tooltip.astro";
+import Content from "../components/Content.astro";
+import TooltipContent from "../components/TooltipContent.astro";
+const { content } = Astro.props;
+
+// Function to estimate reading time
+function estimateReadingTime(text: string): string {
+  // Remove HTML tags and get plain text
+  const plainText = text.replace(/<[^>]*>/g, "");
+
+  // Count words (split by whitespace and filter out empty strings)
+  const words = plainText.split(/\s+/).filter((word) => word.length > 0);
+  const wordCount = words.length;
+
+  // Average reading speed is 200-250 words per minute
+  // Using 225 words per minute as a middle ground
+  const wordsPerMinute = 225;
+  const readingTimeMinutes = Math.ceil(wordCount / wordsPerMinute);
+
+  // Format the reading time
+  if (readingTimeMinutes < 1) {
+    return "< 1 min read";
+  } else if (readingTimeMinutes === 1) {
+    return "1 min read";
+  } else {
+    return `${readingTimeMinutes} min read`;
+  }
+}
+
+// Get the content for reading time calculation
+// We'll calculate this on the client side since we need the rendered content
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<BaseHead title={`${content.title} @ Nat3z`} description={content.description} />
-</head>
-<body>
-	<BlogLayout title={content.title} published={content.published} tags={content.tags || []} lastupdated={content.lastupdated} outdated={content.outdated} client:load>
-    <slot></slot>
-  </BlogLayout>
-</body>
-</html>
+
+<Layout title={`${content.title} - Nat3z`} description={content.description}>
+  <div class="flex flex-col items-center justify-center min-h-screen py-8">
+    <div class="flex flex-col items-center justify-center w-8/12 max-w-4xl">
+      <Header title="Blog" />
+      <main class="w-full">
+        <div class="flex flex-col items-start justify-start pt-4">
+          <!-- Back to blog link -->
+          <a
+            href="/blog"
+            class="font-analogue text-teal hover:text-dark-teal transition-colors mb-6 flex items-center gap-2"
+          >
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fill-rule="evenodd"
+                d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                clip-rule="evenodd"></path>
+            </svg>
+            Back to Blog
+          </a>
+
+          <!-- Article Header Card -->
+          <div class="w-full mb-8 relative overflow-hidden">
+            <!-- Background gradient and pattern -->
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-teal via-teal to-dark-teal"
+            >
+            </div>
+            <div class="absolute inset-0 opacity-10">
+              <div
+                class="absolute top-0 left-0 w-32 h-32 bg-white rounded-full -translate-x-16 -translate-y-16"
+              >
+              </div>
+              <div
+                class="absolute bottom-0 right-0 w-24 h-24 bg-white rounded-full translate-x-12 translate-y-12"
+              >
+              </div>
+              <div
+                class="absolute top-1/2 right-1/4 w-16 h-16 bg-white rounded-full"
+              >
+              </div>
+            </div>
+
+            <!-- Content -->
+            <div class="relative z-0 p-8 md:p-10">
+              <div class="flex flex-col gap-6">
+                <!-- Title and status indicators -->
+                <div class="flex items-start justify-between gap-4">
+                  <div class="flex-1">
+                    <h1
+                      class="font-analogue text-4xl md:text-5xl font-bold text-white leading-tight mb-2"
+                    >
+                      {content.title}
+                    </h1>
+                    {
+                      content.outdated && (
+                        <div class="flex items-center gap-2 mb-4">
+                          <Tooltip
+                            triggerMode="hover"
+                            position="cursor"
+                            offset={{ x: 0, y: 10 }}
+                            tooltipClass="w-60"
+                          >
+                            <Content slot="content">
+                              <div class="flex items-center gap-2 bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm font-medium">
+                                <svg
+                                  class="w-4 h-4"
+                                  fill="currentColor"
+                                  viewBox="0 0 20 20"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                    clip-rule="evenodd"
+                                  />
+                                </svg>
+                                <span>Outdated Content</span>
+                              </div>
+                            </Content>
+                            <TooltipContent slot="tooltip">
+                              This post might contain outdated information.
+                              Please check for more recent updates.
+                            </TooltipContent>
+                          </Tooltip>
+                        </div>
+                      )
+                    }
+                  </div>
+                </div>
+
+                <!-- Description -->
+                <p
+                  class="font-analogue text-xl md:text-2xl text-white/95 leading-relaxed max-w-4xl"
+                >
+                  {content.description}
+                </p>
+
+                <!-- Metadata section -->
+                <div
+                  class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 pt-6 border-t border-white/20"
+                >
+                  <!-- Date information -->
+                  <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                    <div class="flex items-center gap-3">
+                      <div
+                        class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center"
+                      >
+                        <svg
+                          class="w-5 h-5 text-white"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                            clip-rule="evenodd"></path>
+                        </svg>
+                      </div>
+                      <div class="flex flex-col">
+                        <p
+                          class="font-analogue text-sm text-white/90 font-medium"
+                        >
+                          Published {
+                            new Date(content.published).toLocaleDateString(
+                              "en-US",
+                              {
+                                month: "long",
+                                day: "numeric",
+                                year: "numeric",
+                              }
+                            )
+                          }
+                        </p>
+                        {
+                          content.lastupdated &&
+                            content.lastupdated !== content.published && (
+                              <p class="font-analogue text-sm text-white/75">
+                                Updated{" "}
+                                {new Date(
+                                  content.lastupdated
+                                ).toLocaleDateString("en-US", {
+                                  month: "long",
+                                  day: "numeric",
+                                  year: "numeric",
+                                })}
+                              </p>
+                            )
+                        }
+                      </div>
+                    </div>
+
+                    <!-- Reading time estimate -->
+                    <div class="flex items-center gap-2 text-white/75">
+                      <svg
+                        class="w-4 h-4"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                          clip-rule="evenodd"></path>
+                      </svg>
+                      <span class="font-analogue text-sm" id="reading-time"
+                        >Calculating...</span
+                      >
+                    </div>
+                  </div>
+
+                  <!-- Tags -->
+                  {
+                    content.tags && content.tags.length > 0 && (
+                      <div class="flex flex-wrap gap-2">
+                        {content.tags.map((tag: string) => (
+                          <span class="font-analogue text-sm bg-white/15 backdrop-blur-sm text-white px-4 py-2 rounded-full border border-white/20 hover:bg-white/25 transition-colors">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                    )
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Article Content -->
+          <article class="w-full prose prose-lg max-w-none">
+            <div class="bg-white p-8 shadow-sm border border-gray-100">
+              <slot />
+            </div>
+          </article>
+
+          <!-- Footer navigation -->
+          <div class="w-full mt-8 pt-6 border-t border-gray-200">
+            <a
+              href="/blog"
+              class="font-analogue text-teal hover:text-dark-teal transition-colors flex items-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  fill-rule="evenodd"
+                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  clip-rule="evenodd"></path>
+              </svg>
+              Back to Blog
+            </a>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  @import "../styles/global.css";
+
+  /* Enhanced typography and spacing for blog articles */
+  article :global(h1) {
+    @apply font-analogue text-3xl font-bold text-gray-900 mt-8 mb-4 first:mt-0;
+  }
+
+  article :global(h2) {
+    @apply font-analogue text-2xl font-bold text-gray-900 mt-6 mb-3;
+  }
+
+  article :global(h3) {
+    @apply font-analogue text-xl font-bold text-gray-900 mt-5 mb-2;
+  }
+
+  article :global(h4) {
+    @apply font-analogue text-lg font-bold text-gray-900 mt-4 mb-2;
+  }
+
+  article :global(p) {
+    @apply font-analogue text-base text-gray-700 leading-relaxed mb-4;
+  }
+
+  article :global(a) {
+    @apply text-teal hover:text-dark-teal underline transition-colors;
+  }
+
+  article :global(ul),
+  article :global(ol) {
+    @apply font-analogue text-base text-gray-700 mb-4 pl-6;
+  }
+
+  article :global(li) {
+    @apply mb-2;
+  }
+
+  article :global(blockquote) {
+    @apply border-l-4 border-teal bg-gray-50 pl-4 py-2 my-4 italic;
+  }
+
+  article :global(code) {
+    @apply bg-gray-100 px-2 py-1 rounded text-sm font-mono;
+  }
+
+  article :global(pre) {
+    @apply bg-gray-900 text-gray-100 p-4 overflow-x-auto my-4;
+  }
+
+  article :global(pre code) {
+    @apply bg-transparent p-0;
+  }
+
+  article :global(img) {
+    @apply shadow-sm my-6 max-w-full h-auto;
+  }
+
+  article :global(table) {
+    @apply w-full border-collapse border border-gray-300 my-4;
+  }
+
+  article :global(th),
+  article :global(td) {
+    @apply border border-gray-300 px-4 py-2 text-left;
+  }
+
+  article :global(th) {
+    @apply bg-gray-100 font-bold;
+  }
+
+  article :global(hr) {
+    @apply border-gray-300 my-8;
+  }
+</style>
+
+<script>
+  // Calculate reading time from the actual content
+  function calculateReadingTime() {
+    const articleContent = document.querySelector("article");
+    if (!articleContent) return "Unknown read time";
+
+    // Get all text content from the article
+    const textContent =
+      articleContent.textContent || articleContent.innerText || "";
+
+    // Remove extra whitespace and count words
+    const words = textContent
+      .trim()
+      .split(/\s+/)
+      .filter((word) => word.length > 0);
+    const wordCount = words.length;
+
+    // Average reading speed: 225 words per minute
+    const wordsPerMinute = 225;
+    const readingTimeMinutes = Math.ceil(wordCount / wordsPerMinute);
+
+    // Format the reading time
+    if (readingTimeMinutes < 1) {
+      return "< 1 min read";
+    } else if (readingTimeMinutes === 1) {
+      return "1 min read";
+    } else {
+      return `${readingTimeMinutes} min read`;
+    }
+  }
+
+  // Update the reading time when the page loads
+  document.addEventListener("DOMContentLoaded", function () {
+    const readingTimeElement = document.getElementById("reading-time");
+    if (readingTimeElement) {
+      const readingTime = calculateReadingTime();
+      readingTimeElement.textContent = readingTime;
+    }
+  });
+</script>

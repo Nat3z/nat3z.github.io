@@ -12,6 +12,7 @@ outdated: true
 Hey Everyone! As you may have noticed, the website has been completly changed! This is because the old website was cluttered and was just not visually appealing in my opinion. With some more knowledge of CSS and HTML, I recreated the website from the ground up!
 
 NEW FEATURES:
+
 * CSS changed and HTML setup changed.
 * Added resetStylesheet.css (Resets the Stylesheet)
 * Removed "Discord" on the header.

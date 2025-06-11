@@ -1,0 +1,122 @@
+---
+export interface Props {
+  triggerMode?: "hover" | "click";
+  dropdownClass?: string;
+  wrapperClass?: string;
+}
+
+const {
+  triggerMode = "hover",
+  dropdownClass = "absolute top-full left-0 mt-1 bg-white border-2 border-dark-gray shadow-lg min-w-max z-10",
+  wrapperClass = "relative inline-block",
+} = Astro.props;
+
+// Generate unique ID for this dropdown
+const dropdownId = `dropdown-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div class={wrapperClass} data-dropdown-id={dropdownId}>
+  <div class="dropdown-trigger">
+    <slot name="trigger" />
+  </div>
+
+  <div
+    class={`dropdown-content hidden ${dropdownClass}`}
+    data-dropdown-content={dropdownId}
+  >
+    <slot name="content" />
+  </div>
+</div>
+
+<script define:vars={{ triggerMode, dropdownId }}>
+  const wrapper = document.querySelector(`[data-dropdown-id="${dropdownId}"]`);
+  const trigger = wrapper?.querySelector(".dropdown-trigger");
+  const content = wrapper?.querySelector(
+    `[data-dropdown-content="${dropdownId}"]`
+  );
+
+  // Global dropdown management
+  if (!window.openDropdowns) {
+    window.openDropdowns = new Set();
+  }
+
+  function closeDropdown() {
+    content.classList.add("hidden");
+    window.openDropdowns.delete(dropdownId);
+  }
+
+  function openDropdown() {
+    // Close all other dropdowns first
+    window.openDropdowns.forEach((otherId) => {
+      if (otherId !== dropdownId) {
+        const otherContent = document.querySelector(
+          `[data-dropdown-content="${otherId}"]`
+        );
+        if (otherContent) {
+          otherContent.classList.add("hidden");
+        }
+      }
+    });
+
+    // Clear the set and add only this dropdown
+    window.openDropdowns.clear();
+    window.openDropdowns.add(dropdownId);
+    content.classList.remove("hidden");
+  }
+
+  if (trigger && content) {
+    if (triggerMode === "hover") {
+      // Hover mode
+      wrapper.addEventListener("mouseenter", () => {
+        openDropdown();
+      });
+
+      wrapper.addEventListener("mouseleave", () => {
+        closeDropdown();
+      });
+    } else {
+      // Click mode
+      let isOpen = false;
+
+      trigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        if (isOpen) {
+          // If this dropdown is open, close it
+          closeDropdown();
+          isOpen = false;
+        } else {
+          // If this dropdown is closed, open it (and close others)
+          openDropdown();
+          isOpen = true;
+        }
+      });
+
+      // Close when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          closeDropdown();
+          isOpen = false;
+        }
+      });
+    }
+  }
+</script>
+
+<style>
+  .dropdown-content {
+    animation: fadeIn 0.15s ease-in-out;
+    z-index: 10;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

@@ -1,0 +1,120 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Analogue OS";
+  src: url("/AnalogueOS-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-analogue: "Analogue OS", system-ui, sans-serif;
+
+  --color-dark-gray: #373b3e;
+  --color-light-gray: #bec8d1;
+  --color-teal: #86cecb;
+  --color-dark-teal: #137a7f;
+  --color-pink: #e12885;
+}
+
+/* CRT Screen Effect */
+@utility crt-screen {
+  position: relative;
+  overflow: hidden;
+  background-color: #1a1a1a;
+  background-image: url("/fabric_1.webp");
+  border-radius: 5px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 255, 0, 0.3);
+
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.2) 0px,
+      rgba(0, 0, 0, 0.2) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    z-index: 9999;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(0, 0, 0, 0) 80%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+    border-radius: 5px;
+    z-index: 9998;
+    pointer-events: none;
+  }
+}
+
+@utility crt-content {
+  position: relative;
+  z-index: 2;
+  padding: 20px;
+  font-family: monospace;
+  color: #00ff00;
+  filter: blur(0.5px) contrast(1.2) saturate(1.2);
+  animation: crt-flicker 0.15s infinite alternate;
+}
+
+@utility crt-scanlines {
+  &::before {
+    content: "";
+    position: fixed;
+    top: -100vh;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(
+      to bottom,
+      transparent 40%,
+      rgba(0, 255, 0, 0.03) 45%,
+      rgba(0, 255, 0, 0.08) 50%,
+      rgba(0, 255, 0, 0.03) 55%,
+      transparent 60%
+    );
+    z-index: 9996;
+    pointer-events: none;
+    animation: crt-scanlines 3s linear infinite;
+  }
+}
+
+@keyframes crt-flicker {
+  0% {
+    filter: blur(0.5px) contrast(1.2) saturate(1.2);
+    opacity: 1;
+  }
+  50% {
+    filter: blur(0.8px) contrast(1.3) saturate(1.3);
+    opacity: 0.98;
+  }
+  100% {
+    filter: blur(0.5px) contrast(1.2) saturate(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes crt-scanlines {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(200vh);
+  }
+}

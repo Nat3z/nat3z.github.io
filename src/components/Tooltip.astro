@@ -1,0 +1,308 @@
+---
+export interface Props {
+  position?: "top" | "bottom" | "left" | "right" | "cursor";
+  offset?: { x: number; y: number };
+  triggerMode?: "hover" | "click";
+  wrapperClass?: string;
+  tooltipClass?: string;
+}
+
+const {
+  position = "cursor",
+  offset = { x: 10, y: -10 },
+  triggerMode = "hover",
+  wrapperClass = "relative inline-block",
+  tooltipClass: tooltipClassProp
+} = Astro.props;
+
+const tooltipClass = `${tooltipClassProp ?? ""} ${
+  position === "cursor"
+    ? "fixed z-50 px-2 py-1 text-sm bg-light-gray font-analogue shadow-xl pointer-events-none max-w-xs"
+    : "absolute z-50 px-2 py-1 text-sm bg-light-gray font-analogue shadow-xl h-max pointer-events-none"
+}`.trim();
+
+// Generate unique ID for this tooltip
+const tooltipId = `tooltip-${Math.random().toString(36).substr(2, 9)}`;
+
+// Position classes for static tooltip placement
+const positionClasses = {
+  top: "bottom-full left-1/2 transform -translate-x-1/2 mb-2",
+  bottom: "top-full left-1/2 transform -translate-x-1/2 mt-2",
+  left: "right-full top-1/2 transform -translate-y-1/2 mr-2",
+  right: "left-full top-1/2 transform -translate-y-1/2 ml-2",
+  cursor: "", // No static positioning for cursor mode
+};
+
+const isCursorMode = position === "cursor";
+---
+
+<div class={wrapperClass} data-tooltip-id={tooltipId}>
+  <div class="tooltip-trigger relative">
+    <slot name="content" />
+  </div>
+
+  <div
+    class={`tooltip-content hidden ${tooltipClass} ${positionClasses[position]}`}
+    data-tooltip-content={tooltipId}
+    style={isCursorMode ? "left: 0px; top: 0px;" : ""}
+  >
+    <slot name="tooltip" />
+    
+    {!isCursorMode && (
+      <!-- Tooltip arrow for static positioning -->
+      <div class={`tooltip-arrow ${position}`}></div>
+    )}
+  </div>
+</div>
+
+<script define:vars={{ triggerMode, tooltipId, offset, isCursorMode, position }}>
+  const wrapper = document.querySelector(`[data-tooltip-id="${tooltipId}"]`);
+  const trigger = wrapper?.querySelector(".tooltip-trigger");
+  const content = wrapper?.querySelector(
+    `[data-tooltip-content="${tooltipId}"]`
+  );
+  const arrow = content?.querySelector(".tooltip-arrow");
+
+  // Global tooltip management
+  if (!window.openTooltips) {
+    window.openTooltips = new Set();
+  }
+
+  let isTooltipVisible = false;
+
+  function updateArrowPosition(e) {
+    if (!arrow || isCursorMode || !e) return;
+    const contentRect = content.getBoundingClientRect();
+    const ARROW_HALF_WIDTH = 6; // from border-width: 6px
+
+    if (position === "top" || position === "bottom") {
+      let x = e.clientX - contentRect.left;
+      x = Math.max(ARROW_HALF_WIDTH, x);
+      x = Math.min(contentRect.width - ARROW_HALF_WIDTH, x);
+      arrow.style.left = `${x}px`;
+      arrow.style.transform = "translateX(-50%)";
+    } else {
+      // left or right
+      let y = e.clientY - contentRect.top;
+      y = Math.max(ARROW_HALF_WIDTH, y);
+      y = Math.min(contentRect.height - ARROW_HALF_WIDTH, y);
+      arrow.style.top = `${y}px`;
+      arrow.style.transform = "translateY(-50%)";
+    }
+  }
+
+  function resetArrowPosition() {
+    if (!arrow || isCursorMode) return;
+    if (position === "top" || position === "bottom") {
+      arrow.style.left = "50%";
+      arrow.style.transform = "translateX(-50%)";
+    } else {
+      // left or right
+      arrow.style.top = "50%";
+      arrow.style.transform = "translateY(-50%)";
+    }
+  }
+
+  function updateTooltipPosition(e) {
+    if (content && isTooltipVisible && isCursorMode) {
+      const x = e.clientX + offset.x;
+      const y = e.clientY + offset.y;
+
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      
+      // Ensure content is visible for accurate measurement
+      const wasHidden = content.classList.contains('hidden');
+      if (wasHidden) {
+        content.classList.remove('hidden');
+        content.style.visibility = 'hidden'; // Keep it invisible but measurable
+      }
+      
+      const tooltipRect = content.getBoundingClientRect();
+      
+      if (wasHidden) {
+        content.style.visibility = ''; // Restore visibility
+      }
+
+      let finalX = x;
+      let finalY = y;
+
+      // Check right boundary
+      if (x + tooltipRect.width > viewportWidth - 5) {
+        finalX = x - tooltipRect.width - offset.x * 2;
+      }
+
+      // Check bottom boundary  
+      if (y + tooltipRect.height > viewportHeight - 5) {
+        finalY = y - tooltipRect.height - offset.y * 2;
+      }
+
+      // Check left boundary
+      if (finalX < 5) {
+        finalX = 5;
+      }
+
+      // Check top boundary
+      if (finalY < 5) {
+        finalY = 5;
+      }
+
+      content.style.left = `${finalX}px`;
+      content.style.top = `${finalY}px`;
+    }
+  }
+
+  function closeTooltip() {
+    if (content) {
+      content.classList.add("hidden");
+      window.openTooltips.delete(tooltipId);
+      isTooltipVisible = false;
+
+      if (isCursorMode) {
+        document.removeEventListener("mousemove", updateTooltipPosition);
+      }
+      resetArrowPosition();
+    }
+  }
+
+  function openTooltip(e) {
+    if (triggerMode === "click") {
+      window.openTooltips.forEach((otherId) => {
+        if (otherId !== tooltipId) {
+          const otherContent = document.querySelector(
+            `[data-tooltip-content="${otherId}"]`
+          );
+          if (otherContent) {
+            otherContent.classList.add("hidden");
+          }
+        }
+      });
+      window.openTooltips.clear();
+    }
+
+    window.openTooltips.add(tooltipId);
+    if (content) {
+      isTooltipVisible = true;
+      content.classList.remove("hidden");
+
+      if (isCursorMode) {
+        document.addEventListener("mousemove", updateTooltipPosition);
+
+        if (e) {
+          // Use requestAnimationFrame to ensure the tooltip is rendered before positioning
+          requestAnimationFrame(() => {
+            updateTooltipPosition(e);
+          });
+        }
+      } else {
+        if (e) {
+          updateArrowPosition(e);
+        }
+      }
+    }
+  }
+
+  if (trigger && content) {
+    if (triggerMode === "hover") {
+      wrapper.addEventListener("mouseenter", (e) => {
+        openTooltip(e);
+      });
+
+      wrapper.addEventListener("mouseleave", () => {
+        closeTooltip();
+      });
+
+      if (!isCursorMode) {
+        wrapper.addEventListener("mousemove", updateArrowPosition);
+      }
+    } else {
+      // Click mode
+      let isOpen = false;
+
+      trigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        if (isOpen) {
+          closeTooltip();
+          isOpen = false;
+        } else {
+          openTooltip(e);
+          isOpen = true;
+        }
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!wrapper.contains(e.target)) {
+          closeTooltip();
+          isOpen = false;
+        }
+      });
+    }
+  }
+</script>
+
+<style>
+  .tooltip-content {
+    animation: fadeIn 0.15s ease-out;
+    transition: opacity 0.15s ease-out;
+  }
+
+  .tooltip-content.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Tooltip arrows for static positioning */
+  .tooltip-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+
+  .tooltip-arrow.top {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--color-light-gray);
+  }
+
+  .tooltip-arrow.bottom {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid var(--color-light-gray);
+  }
+
+  .tooltip-arrow.left {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 6px solid var(--color-light-gray);
+  }
+
+  .tooltip-arrow.right {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-right: 6px solid var(--color-light-gray);
+  }
+</style>

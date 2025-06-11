@@ -1,0 +1,22 @@
+---
+export interface Props {
+  bgColor?: string;
+  width?: string;
+  padding?: string;
+  className?: string;
+}
+
+const {
+  bgColor = "bg-teal",
+  width = "w-full",
+  padding = "p-4",
+  className = "",
+} = Astro.props;
+
+const cardClasses = `flex flex-col items-center justify-center border-dark-gray border-2 ${bgColor} ${width} ${padding} ${className}`;
+---
+
+<div class={cardClasses}>
+  <slot />
+</div>
+

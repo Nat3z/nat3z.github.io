@@ -1,57 +1,430 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Blog from './blog.svelte'
+import Layout from "../components/Layout.astro";
+import Header from "../components/Header.astro";
+import Card from "../components/Card.astro";
+import Tooltip from "../components/Tooltip.astro";
+import Content from "../components/Content.astro";
+import TooltipContent from "../components/TooltipContent.astro";
+
 interface Frontmatter {
-	frontmatter: {
-		title: string
-		description: string
-		published: string
-		id: string,
-		outdated: boolean,
-		lastupdated: string,
-		tags: string[]
-	}
+  frontmatter: {
+    title: string;
+    description: string;
+    published: string;
+    id: string;
+    outdated: boolean;
+    lastupdated: string;
+    tags: string[];
+  };
 }
+
 // Use Astro.glob() to fetch all posts, and then sort them by date.
-const posts = (await Astro.glob<Frontmatter>('./blog/*.{md,mdx}')).sort(
-	(a, b) => new Date(b.frontmatter.published).valueOf() - new Date(a.frontmatter.published).valueOf()
+const posts = (await Astro.glob<Frontmatter>("./blog/*.{md,mdx}")).sort(
+  (a, b) =>
+    new Date(b.frontmatter.published).valueOf() -
+    new Date(a.frontmatter.published).valueOf()
 );
+
+// Extract all unique tags and years for filter options
+const allTags = [
+  ...new Set(posts.flatMap((post) => post.frontmatter.tags || [])),
+].sort();
+const allYears = [
+  ...new Set(
+    posts.map((post) => new Date(post.frontmatter.published).getFullYear())
+  ),
+].sort((a, b) => b - a);
 ---
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<BaseHead title="Blog List @ Nat3z" description="The list of blogs posted by @Nat3z" />
-</head>
-<body>
-	<main>
-		<Blog client:load>
-			{posts.map(post => 
-				<a href={`/blog/${post.frontmatter.id}`}>
-					<section class="bg-oxford-blue rounded-lg w-9/12 sm:w-96 m-auto flex-col relative mb-2">
-						{ post.frontmatter.outdated && 
-							<div class="rounded-t-lg flex flex-row gap-2 justify-center items-center p-2 absolute right-4 top-3">
-								<span class="material-symbols-outlined text-red-500">
-									error
-								</span>
-							</div>}
-						<div class="p-4">
-							<h1 class="font-raleway font-extrabold text-middle-blue text-2xl">{post.frontmatter.title}</h1>
-							<h2 class="text-pacific-blue">{post.frontmatter.description}</h2>
-						</div>
-						<div class="bg-light-oxford-blue rounded-b-lg flex flex-row gap-2 justify-center items-center p-4">
-							<p class="text-pacific-blue font-raleway text-sm">Published: {post.frontmatter.published}</p>
-							<div class="flex-row flex-wrap gap-2 ml-auto">
-								{ post.frontmatter.tags && post.frontmatter.tags.map(tag => 
-									<p class="text-pacific-blue font-raleway bg-oxford-blue pl-2 pr-2 rounded-sm text-sm">#{tag}</p>
-								)}
-							</div>
 
-						</div>
-					</section>
-				</a>
-			)}
-		</Blog>
+<Layout
+  title="Blog @ Nat3z"
+  description="My thoughts, experiences, and technical adventures"
+>
+  <div class="flex flex-col items-center justify-center min-h-screen py-8">
+    <div class="flex flex-col items-center justify-center w-8/12 max-w-4xl">
+      <Header title="Blog" />
+      <main class="w-full">
+        <div class="flex flex-col items-start justify-start pt-4">
+          <!-- Welcome Header -->
+          <div class="w-full mb-8 relative overflow-hidden">
+            <!-- Background gradient and pattern -->
+            <div
+              class="absolute inset-0 bg-gradient-to-br from-teal via-teal to-dark-teal"
+            >
+            </div>
+            <div class="absolute inset-0 opacity-10">
+              <div
+                class="absolute top-0 left-0 w-32 h-32 bg-white rounded-full -translate-x-16 -translate-y-16"
+              >
+              </div>
+              <div
+                class="absolute bottom-0 right-0 w-24 h-24 bg-white rounded-full translate-x-12 translate-y-12"
+              >
+              </div>
+              <div
+                class="absolute top-1/2 right-1/4 w-16 h-16 bg-white rounded-full"
+              >
+              </div>
+            </div>
 
-	</main>
-</body>
-</html>
+            <!-- Content -->
+            <div class="relative z-0 p-8 md:p-10 text-center">
+              <div class="flex flex-col gap-4">
+                <h1
+                  class="font-analogue text-4xl md:text-5xl font-bold text-white leading-tight"
+                >
+                  Welcome to my blog!
+                </h1>
+                <p
+                  class="font-analogue text-xl md:text-2xl text-white/95 leading-relaxed max-w-3xl mx-auto"
+                >
+                  Here's where I share my thoughts, experiences, and technical
+                  adventures. From coding projects to random musings, you'll
+                  find it all here.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter Options -->
+          <Card
+            bgColor="bg-white"
+            className="w-full mb-4 border border-gray-200"
+          >
+            <div class="flex flex-col gap-3">
+              <!-- Search and Filters in one row -->
+              <div class="flex flex-col lg:flex-row gap-3">
+                <!-- Search Bar -->
+                <div class="relative flex-1">
+                  <div
+                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                  >
+                    <svg
+                      class="h-4 w-4 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    id="search"
+                    placeholder="Search posts..."
+                    class="font-analogue w-full pl-10 pr-4 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-teal focus:border-transparent outline-none"
+                  />
+                </div>
+
+                <!-- Filters Row -->
+                <div class="flex flex-col sm:flex-row gap-3 lg:flex-shrink-0">
+                  <!-- Tag Filter -->
+                  <select
+                    id="tagFilter"
+                    class="font-analogue px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-teal focus:border-transparent outline-none bg-white min-w-0 sm:w-32"
+                  >
+                    <option value="">All Tags</option>
+                    {allTags.map((tag) => <option value={tag}>#{tag}</option>)}
+                  </select>
+
+                  <!-- Year Filter -->
+                  <select
+                    id="yearFilter"
+                    class="font-analogue px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-teal focus:border-transparent outline-none bg-white min-w-0 sm:w-24"
+                  >
+                    <option value="">All Years</option>
+                    {
+                      allYears.map((year) => (
+                        <option value={year}>{year}</option>
+                      ))
+                    }
+                  </select>
+
+                  <!-- Status Filter -->
+                  <select
+                    id="statusFilter"
+                    class="font-analogue px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-teal focus:border-transparent outline-none bg-white min-w-0 sm:w-32"
+                  >
+                    <option value="">All Posts</option>
+                    <option value="current">Current</option>
+                    <option value="outdated">Outdated</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Bottom row with clear button and counter -->
+              <div
+                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-2 border-t border-gray-100"
+              >
+                <button
+                  id="clearFilters"
+                  class="font-analogue px-3 py-1 text-xs text-teal hover:text-dark-teal hover:bg-teal/10 transition-colors rounded border border-teal w-fit"
+                >
+                  Clear Filters
+                </button>
+                <p
+                  id="resultsCounter"
+                  class="font-analogue text-xs text-gray-600"
+                >
+                  Showing {posts.length} post{posts.length !== 1 ? "s" : ""}
+                </p>
+              </div>
+            </div>
+          </Card>
+
+          <!-- No Results Message -->
+          <div id="noResults" class="w-full mb-6 hidden">
+            <Card
+              bgColor="bg-yellow-50"
+              className="w-full border border-yellow-200"
+            >
+              <div class="text-center">
+                <svg
+                  class="mx-auto h-12 w-12 text-yellow-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.314 16.5c-.77.833.192 2.5 1.732 2.5z"
+                  ></path>
+                </svg>
+                <h3
+                  class="mt-2 font-analogue text-sm font-medium text-gray-900"
+                >
+                  No posts found
+                </h3>
+                <p class="mt-1 font-analogue text-sm text-gray-500">
+                  Try adjusting your search terms or filters.
+                </p>
+              </div>
+            </Card>
+          </div>
+
+          <!-- Posts List -->
+          <div id="postsContainer" class="w-full space-y-2 relative">
+            {
+              posts.length === 0 ? (
+                <Card bgColor="bg-gray-100" className="w-full">
+                  <p class="font-analogue text-center text-lg text-gray-600">
+                    No blog posts yet... but they're coming soon! 👀
+                  </p>
+                </Card>
+              ) : (
+                posts.map((post) => (
+                  <a
+                    href={`/blog/${post.frontmatter.id}`}
+                    class="blog-post block w-full transition-all hover:shadow-md group"
+                    data-title={post.frontmatter.title.toLowerCase()}
+                    data-description={post.frontmatter.description.toLowerCase()}
+                    data-tags={(post.frontmatter.tags || []).join(",")}
+                    data-year={new Date(
+                      post.frontmatter.published
+                    ).getFullYear()}
+                    data-outdated={post.frontmatter.outdated}
+                  >
+                    <div class="bg-gray-100 hover:bg-gray-50 transition-colors duration-200 p-4 border-l-4 border-transparent hover:border-teal relative">
+                      {post.frontmatter.outdated && (
+                        <Tooltip
+                          triggerMode="hover"
+                          position="cursor"
+                          offset={{ x: 0, y: 10 }}
+                          tooltipClass="w-60"
+                        >
+                          <Content slot="content">
+                            <div class="absolute top-3 right-3 text-red-500">
+                              <svg
+                                class="w-4 h-4"
+                                fill="currentColor"
+                                viewBox="0 0 20 20"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                  clip-rule="evenodd"
+                                />
+                              </svg>
+                            </div>
+                          </Content>
+                          <TooltipContent slot="tooltip">
+                            This post might be outdated
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
+
+                      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                        <div class="flex-1 min-w-0">
+                          <h2 class="font-analogue text-lg font-bold text-gray-900 group-hover:text-teal transition-colors line-clamp-1">
+                            {post.frontmatter.title}
+                          </h2>
+                          <p class="font-analogue text-sm text-gray-600 line-clamp-2 mt-1">
+                            {post.frontmatter.description}
+                          </p>
+                        </div>
+
+                        <div class="flex flex-col sm:items-end gap-2 sm:ml-4 flex-shrink-0">
+                          <p class="font-analogue text-xs text-gray-500 whitespace-nowrap">
+                            {new Date(
+                              post.frontmatter.published
+                            ).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })}
+                          </p>
+
+                          {post.frontmatter.tags &&
+                            post.frontmatter.tags.length > 0 && (
+                              <div class="flex flex-wrap gap-1 justify-end">
+                                {post.frontmatter.tags
+                                  .slice(0, 3)
+                                  .map((tag) => (
+                                    <span class="font-analogue text-xs bg-teal text-white px-2 py-1">
+                                      #{tag}
+                                    </span>
+                                  ))}
+                                {post.frontmatter.tags.length > 3 && (
+                                  <span class="font-analogue text-xs text-gray-500">
+                                    +{post.frontmatter.tags.length - 3}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                ))
+              )
+            }
+          </div>
+
+          <Card bgColor="bg-gray-100" className="w-full mt-8">
+            <p class="font-analogue text-center text-lg text-gray-600">
+              Want to stay updated? Follow me on
+              <a
+                href="https://x.com/nat3zdev"
+                target="_blank"
+                class="underline text-teal hover:text-dark-teal transition-colors"
+              >
+                Twitter
+              </a>
+              or check out my
+              <a
+                href="https://github.com/nat3z"
+                target="_blank"
+                class="underline text-teal hover:text-dark-teal transition-colors"
+              >
+                GitHub
+              </a>!
+            </p>
+          </Card>
+        </div>
+      </main>
+    </div>
+  </div>
+</Layout>
+
+<script is:inline>
+  // Blog filter functionality
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("search");
+    const tagFilter = document.getElementById("tagFilter");
+    const yearFilter = document.getElementById("yearFilter");
+    const statusFilter = document.getElementById("statusFilter");
+    const clearFiltersBtn = document.getElementById("clearFilters");
+    const resultsCounter = document.getElementById("resultsCounter");
+    const noResults = document.getElementById("noResults");
+    const postsContainer = document.getElementById("postsContainer");
+    const blogPosts = document.querySelectorAll(".blog-post");
+
+    function filterPosts() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      const selectedTag = tagFilter.value;
+      const selectedYear = yearFilter.value;
+      const selectedStatus = statusFilter.value;
+
+      let visibleCount = 0;
+
+      blogPosts.forEach((post) => {
+        const title = post.getAttribute("data-title");
+        const description = post.getAttribute("data-description");
+        const tags = post.getAttribute("data-tags");
+        const year = post.getAttribute("data-year");
+        const outdated = post.getAttribute("data-outdated") === "true";
+
+        let shouldShow = true;
+
+        // Search filter
+        if (
+          searchTerm &&
+          !title.includes(searchTerm) &&
+          !description.includes(searchTerm)
+        ) {
+          shouldShow = false;
+        }
+
+        // Tag filter
+        if (selectedTag && (!tags || !tags.split(",").includes(selectedTag))) {
+          shouldShow = false;
+        }
+
+        // Year filter
+        if (selectedYear && year !== selectedYear) {
+          shouldShow = false;
+        }
+
+        // Status filter
+        if (selectedStatus === "current" && outdated) {
+          shouldShow = false;
+        } else if (selectedStatus === "outdated" && !outdated) {
+          shouldShow = false;
+        }
+
+        if (shouldShow) {
+          post.style.display = "";
+          visibleCount++;
+        } else {
+          post.style.display = "none";
+        }
+      });
+
+      // Update results counter
+      resultsCounter.textContent = `Showing ${visibleCount} post${visibleCount !== 1 ? "s" : ""}`;
+
+      // Show/hide no results message
+      if (visibleCount === 0) {
+        noResults.classList.remove("hidden");
+        postsContainer.classList.add("hidden");
+      } else {
+        noResults.classList.add("hidden");
+        postsContainer.classList.remove("hidden");
+      }
+    }
+
+    function clearFilters() {
+      searchInput.value = "";
+      tagFilter.value = "";
+      yearFilter.value = "";
+      statusFilter.value = "";
+      filterPosts();
+    }
+
+    // Event listeners
+    searchInput.addEventListener("input", filterPosts);
+    tagFilter.addEventListener("change", filterPosts);
+    yearFilter.addEventListener("change", filterPosts);
+    statusFilter.addEventListener("change", filterPosts);
+    clearFiltersBtn.addEventListener("click", clearFilters);
+
+    // Initialize
+    filterPosts();
+  });
+</script>

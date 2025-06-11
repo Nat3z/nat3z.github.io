@@ -1,0 +1,27 @@
+---
+import Content from "./Content.astro";
+import Tooltip from "./Tooltip.astro";
+import TooltipContent from "./TooltipContent.astro";
+
+const { href, icon, name } = Astro.props;
+export interface Props {
+  href: string;
+  icon: string;
+  name: string;
+}
+---
+
+<Tooltip triggerMode="hover" offset={{ x: 0, y: 10 }}>
+  <Content slot="content">
+    <a
+      href={href}
+      class="font-analogue text-center text-lg hover:drop-shadow-lg"
+      target="_blank"
+    >
+      <img src={icon} alt="Social Link" class="w-8 h-8" />
+    </a>
+  </Content>
+  <TooltipContent slot="tooltip">
+    {name}
+  </TooltipContent>
+</Tooltip>

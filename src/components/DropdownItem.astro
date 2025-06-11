@@ -1,0 +1,295 @@
+---
+export interface Props {
+  href?: string;
+  target?: string;
+  onClick?: string;
+  className?: string;
+  icon?: string;
+  tooltip?: string;
+  tooltipPosition?: "top" | "bottom" | "left" | "right" | "cursor";
+  tooltipOffset?: { x: number; y: number };
+  tooltipTriggerMode?: "hover" | "click";
+  tooltipClass?: string;
+}
+
+const {
+  href,
+  target = "_blank",
+  onClick,
+  className = "block w-full text-left px-4 py-2 font-analogue text-sm hover:bg-light-gray transition-colors duration-150",
+  icon,
+  tooltip,
+  tooltipPosition = "right",
+  tooltipOffset = { x: 0, y: 10 },
+  tooltipTriggerMode = "hover",
+  tooltipClass = "w-max"
+} = Astro.props;
+
+const isLink = !!href;
+const Tag = isLink ? "a" : "button";
+
+// Generate unique ID for tooltip if one is provided
+const tooltipId = tooltip ? `tooltip-${Math.random().toString(36).substr(2, 9)}` : null;
+
+// Tooltip classes and positioning
+const tooltipContentClass = `${tooltipClass ?? ""} ${
+  tooltipPosition === "cursor"
+    ? "fixed z-50 px-2 py-1 text-sm bg-light-gray font-analogue shadow-xl pointer-events-none max-w-xs"
+    : "absolute z-50 px-2 py-1 text-sm bg-light-gray font-analogue shadow-xl h-max pointer-events-none"
+}`.trim();
+
+const positionClasses = {
+  top: "bottom-full left-1/2 transform -translate-x-1/2 mb-2",
+  bottom: "top-full left-1/2 transform -translate-x-1/2 mt-2",
+  left: "right-full top-1/2 transform -translate-y-1/2 mr-2",
+  right: "left-full top-1/2 transform -translate-y-1/2 ml-2",
+  cursor: "", // No static positioning for cursor mode
+};
+
+const isCursorMode = tooltipPosition === "cursor";
+---
+
+{tooltip ? (
+  <div class="relative w-full" data-tooltip-id={tooltipId}>
+    <div class="tooltip-trigger relative w-full">
+      <Tag
+        class={className}
+        href={isLink ? href : undefined}
+        target={isLink ? target : undefined}
+        onclick={onClick}
+      >
+        <div class="flex flex-row items-center gap-2">
+          {icon && <img src={icon} alt="Icon" class="w-4 h-4" />}
+          <slot />
+        </div>
+      </Tag>
+    </div>
+
+    <div
+      class={`tooltip-content hidden ${tooltipContentClass} ${positionClasses[tooltipPosition]}`}
+      data-tooltip-content={tooltipId}
+      style={isCursorMode ? "left: 0px; top: 0px;" : ""}
+    >
+      {tooltip}
+      
+      {!isCursorMode && (
+        <!-- Tooltip arrow for static positioning -->
+        <div class={`tooltip-arrow ${tooltipPosition}`}></div>
+      )}
+    </div>
+  </div>
+) : (
+  <Tag
+    class={className}
+    href={isLink ? href : undefined}
+    target={isLink ? target : undefined}
+    onclick={onClick}
+  >
+    <div class="flex flex-row items-center gap-2">
+      {icon && <img src={icon} alt="Icon" class="w-4 h-4" />}
+      <slot />
+    </div>
+  </Tag>
+)}
+
+{tooltip && (
+  <script define:vars={{ tooltipTriggerMode, tooltipId, tooltipOffset, isCursorMode, tooltipPosition }}>
+    const wrapper = document.querySelector(`[data-tooltip-id="${tooltipId}"]`);
+    const trigger = wrapper?.querySelector(".tooltip-trigger");
+    const content = wrapper?.querySelector(
+      `[data-tooltip-content="${tooltipId}"]`
+    );
+    const arrow = content?.querySelector(".tooltip-arrow");
+
+    // Global tooltip management
+    if (!window.openTooltips) {
+      window.openTooltips = new Set();
+    }
+
+    let isTooltipVisible = false;
+
+    function updateArrowPosition(e) {
+      if (!arrow || isCursorMode || !e) return;
+      const contentRect = content.getBoundingClientRect();
+      const ARROW_HALF_WIDTH = 6; // from border-width: 6px
+
+      if (tooltipPosition === "top" || tooltipPosition === "bottom") {
+        let x = e.clientX - contentRect.left;
+        x = Math.max(ARROW_HALF_WIDTH, x);
+        x = Math.min(contentRect.width - ARROW_HALF_WIDTH, x);
+        arrow.style.left = `${x}px`;
+        arrow.style.transform = "translateX(-50%)";
+      } else {
+        // left or right
+        let y = e.clientY - contentRect.top;
+        y = Math.max(ARROW_HALF_WIDTH, y);
+        y = Math.min(contentRect.height - ARROW_HALF_WIDTH, y);
+        arrow.style.top = `${y}px`;
+        arrow.style.transform = "translateY(-50%)";
+      }
+    }
+
+    function resetArrowPosition() {
+      if (!arrow || isCursorMode) return;
+      if (tooltipPosition === "top" || tooltipPosition === "bottom") {
+        arrow.style.left = "50%";
+        arrow.style.transform = "translateX(-50%)";
+      } else {
+        // left or right
+        arrow.style.top = "50%";
+        arrow.style.transform = "translateY(-50%)";
+      }
+    }
+
+    function updateTooltipPosition(e) {
+      if (content && isTooltipVisible && isCursorMode) {
+        const x = e.clientX + tooltipOffset.x;
+        const y = e.clientY + tooltipOffset.y;
+
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+        const tooltipRect = content.getBoundingClientRect();
+
+        let finalX = x;
+        let finalY = y;
+
+        if (x + tooltipRect.width > viewportWidth) {
+          finalX = x - tooltipRect.width - tooltipOffset.x * 2;
+        }
+
+        if (y + tooltipRect.height > viewportHeight) {
+          finalY = y - tooltipRect.height - tooltipOffset.y * 2;
+        }
+
+        finalX = Math.max(5, finalX);
+        finalY = Math.max(5, finalY);
+
+        content.style.left = `${finalX}px`;
+        content.style.top = `${finalY}px`;
+      }
+    }
+
+    function closeTooltip() {
+      if (content) {
+        content.classList.add("hidden");
+        window.openTooltips.delete(tooltipId);
+        isTooltipVisible = false;
+
+        if (isCursorMode) {
+          document.removeEventListener("mousemove", updateTooltipPosition);
+        }
+        resetArrowPosition();
+      }
+    }
+
+    function openTooltip(e) {
+      if (tooltipTriggerMode === "click") {
+        window.openTooltips.forEach((otherId) => {
+          if (otherId !== tooltipId) {
+            const otherContent = document.querySelector(
+              `[data-tooltip-content="${otherId}"]`
+            );
+            if (otherContent) {
+              otherContent.classList.add("hidden");
+            }
+          }
+        });
+        window.openTooltips.clear();
+      }
+
+      window.openTooltips.add(tooltipId);
+      if (content) {
+        isTooltipVisible = true;
+        content.classList.remove("hidden");
+
+        if (isCursorMode) {
+          document.addEventListener("mousemove", updateTooltipPosition);
+
+          if (e) {
+            updateTooltipPosition(e);
+          }
+        } else {
+          if (e) {
+            updateArrowPosition(e);
+          }
+        }
+      }
+    }
+
+    if (trigger && content) {
+      if (tooltipTriggerMode === "hover") {
+        wrapper.addEventListener("mouseenter", (e) => {
+          openTooltip(e);
+        });
+
+        wrapper.addEventListener("mouseleave", () => {
+          closeTooltip();
+        });
+
+        if (!isCursorMode) {
+          wrapper.addEventListener("mousemove", updateArrowPosition);
+        }
+      } else {
+        // Click mode
+        let isOpen = false;
+
+        trigger.addEventListener("click", (e) => {
+          e.stopPropagation();
+
+          if (isOpen) {
+            closeTooltip();
+            isOpen = false;
+          } else {
+            openTooltip(e);
+            isOpen = true;
+          }
+        });
+
+        // Close on outside click
+        document.addEventListener("click", (e) => {
+          if (!wrapper.contains(e.target)) {
+            closeTooltip();
+            isOpen = false;
+          }
+        });
+      }
+    }
+  </script>
+)}
+
+<style>
+  .tooltip-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+  }
+
+  .tooltip-arrow.top {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-color: rgb(229, 231, 235); /* bg-light-gray */
+  }
+
+  .tooltip-arrow.bottom {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-color: rgb(229, 231, 235); /* bg-light-gray */
+  }
+
+  .tooltip-arrow.left {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left-color: rgb(229, 231, 235); /* bg-light-gray */
+  }
+
+  .tooltip-arrow.right {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-right-color: rgb(229, 231, 235); /* bg-light-gray */
+  }
+</style>
