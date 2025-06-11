@@ -13,7 +13,7 @@ export default defineConfig({
 
   adapter: vercel({
     isr: {
-      bypassToken: "0023403204032403204abfw",
+      bypassToken: "EyUPFxvODK@aP2FEa2tPubY^p!qYhg5h",
       expiration: 60 * 60, // 1 hour in seconds
     }
   })
