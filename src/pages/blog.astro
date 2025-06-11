@@ -40,13 +40,17 @@ const allYears = [
   title="Blog | Nat3z"
   description="My thoughts, experiences, and technical adventures"
 >
-  <div class="flex flex-col items-center justify-center min-h-screen py-8">
-    <div class="flex flex-col items-center justify-center w-8/12 max-w-4xl">
+  <div
+    class="flex flex-col items-center justify-center min-h-screen py-4 md:py-8"
+  >
+    <div
+      class="flex flex-col items-center justify-center w-11/12 md:w-10/12 lg:w-8/12 max-w-4xl"
+    >
       <Header title="Blog" />
       <main class="w-full">
         <div class="flex flex-col items-start justify-start pt-4">
           <!-- Welcome Header -->
-          <div class="w-full mb-8 relative overflow-hidden">
+          <div class="w-full mb-6 md:mb-8 relative overflow-hidden">
             <!-- Background gradient and pattern -->
             <div
               class="absolute inset-0 bg-gradient-to-br from-teal via-teal to-dark-teal"
@@ -68,15 +72,15 @@ const allYears = [
             </div>
 
             <!-- Content -->
-            <div class="relative z-0 p-8 md:p-10 text-center">
-              <div class="flex flex-col gap-4">
+            <div class="relative z-0 p-4 md:p-8 lg:p-10 text-center">
+              <div class="flex flex-col gap-3 md:gap-4">
                 <h1
-                  class="font-analogue text-4xl md:text-5xl font-bold text-white leading-tight"
+                  class="font-analogue text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight"
                 >
                   Welcome to my blog!
                 </h1>
                 <p
-                  class="font-analogue text-xl md:text-2xl text-white/95 leading-relaxed max-w-3xl mx-auto"
+                  class="font-analogue text-lg md:text-xl lg:text-2xl text-white/95 leading-relaxed max-w-3xl mx-auto"
                 >
                   Here's where I share my thoughts, experiences, and technical
                   adventures. From coding projects to random musings, you'll
@@ -92,10 +96,10 @@ const allYears = [
             className="w-full mb-4 border border-gray-200"
           >
             <div class="flex flex-col gap-3">
-              <!-- Search and Filters in one row -->
-              <div class="flex flex-col lg:flex-row gap-3">
+              <!-- Search and Filters -->
+              <div class="flex flex-col gap-3">
                 <!-- Search Bar -->
-                <div class="relative flex-1">
+                <div class="relative">
                   <div
                     class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
                   >
@@ -121,11 +125,11 @@ const allYears = [
                 </div>
 
                 <!-- Filters Row -->
-                <div class="flex flex-col sm:flex-row gap-3 lg:flex-shrink-0">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <!-- Tag Filter -->
                   <select
                     id="tagFilter"
-                    class="font-analogue px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-teal focus:border-transparent outline-none bg-white min-w-0 sm:w-32"
+                    class="font-analogue px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-teal focus:border-transparent outline-none bg-white"
                   >
                     <option value="">All Tags</option>
                     {allTags.map((tag) => <option value={tag}>#{tag}</option>)}
@@ -134,7 +138,7 @@ const allYears = [
                   <!-- Year Filter -->
                   <select
                     id="yearFilter"
-                    class="font-analogue px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-teal focus:border-transparent outline-none bg-white min-w-0 sm:w-24"
+                    class="font-analogue px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-teal focus:border-transparent outline-none bg-white"
                   >
                     <option value="">All Years</option>
                     {
@@ -147,7 +151,7 @@ const allYears = [
                   <!-- Status Filter -->
                   <select
                     id="statusFilter"
-                    class="font-analogue px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-teal focus:border-transparent outline-none bg-white min-w-0 sm:w-32"
+                    class="font-analogue px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-teal focus:border-transparent outline-none bg-white"
                   >
                     <option value="">All Posts</option>
                     <option value="current">Current</option>
@@ -230,7 +234,7 @@ const allYears = [
                     ).getFullYear()}
                     data-outdated={post.frontmatter.outdated}
                   >
-                    <div class="bg-gray-100 hover:bg-gray-50 transition-colors duration-200 p-4 border-l-4 border-transparent hover:border-teal relative">
+                    <div class="bg-gray-100 hover:bg-gray-50 transition-colors duration-200 p-3 md:p-4 border-l-4 border-transparent hover:border-teal relative">
                       {post.frontmatter.outdated && (
                         <Tooltip
                           triggerMode="hover"
@@ -259,18 +263,18 @@ const allYears = [
                         </Tooltip>
                       )}
 
-                      <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                      <div class="flex flex-col gap-3">
                         <div class="flex-1 min-w-0">
-                          <h2 class="font-analogue text-lg font-bold text-gray-900 group-hover:text-teal transition-colors line-clamp-1">
+                          <h2 class="font-analogue text-base md:text-lg font-bold text-gray-900 group-hover:text-teal transition-colors">
                             {post.frontmatter.title}
                           </h2>
-                          <p class="font-analogue text-sm text-gray-600 line-clamp-2 mt-1">
+                          <p class="font-analogue text-sm text-gray-600 mt-1 leading-relaxed">
                             {post.frontmatter.description}
                           </p>
                         </div>
 
-                        <div class="flex flex-col sm:items-end gap-2 sm:ml-4 flex-shrink-0">
-                          <p class="font-analogue text-xs text-gray-500 whitespace-nowrap">
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                          <p class="font-analogue text-xs text-gray-500">
                             {new Date(
                               post.frontmatter.published
                             ).toLocaleDateString("en-US", {
@@ -282,7 +286,7 @@ const allYears = [
 
                           {post.frontmatter.tags &&
                             post.frontmatter.tags.length > 0 && (
-                              <div class="flex flex-wrap gap-1 justify-end">
+                              <div class="flex flex-wrap gap-1">
                                 {post.frontmatter.tags
                                   .slice(0, 3)
                                   .map((tag) => (
@@ -306,8 +310,10 @@ const allYears = [
             }
           </div>
 
-          <Card bgColor="bg-gray-100" className="w-full mt-8">
-            <p class="font-analogue text-center text-lg text-gray-600">
+          <Card bgColor="bg-gray-100" className="w-full mt-6 md:mt-8">
+            <p
+              class="font-analogue text-center text-base md:text-lg text-gray-600"
+            >
               Want to stay updated? Follow me on
               <a
                 href="https://x.com/nat3zdev"
