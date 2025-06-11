@@ -6,9 +6,10 @@ export interface Props {
   className?: string;
   imageClassName?: string;
   imageAlt?: string;
+  alwaysLoop?: boolean;
 }
 
-const { text, images, speed = 50, className = "", imageClassName = "", imageAlt = "Marquee image" } = Astro.props;
+const { text, images, speed = 50, className = "", imageClassName = "", imageAlt = "Marquee image", alwaysLoop = false } = Astro.props;
 const marqueeId = `marquee-${Math.random().toString(36).substr(2, 9)}`;
 const hasContent = text || (images && images.length > 0);
 ---
@@ -96,7 +97,7 @@ const hasContent = text || (images && images.length > 0);
   }
 </style>
 
-<script define:vars={{ marqueeId }}>
+<script define:vars={{ marqueeId, alwaysLoop }}>
   document.addEventListener("DOMContentLoaded", () => {
     const container = document.querySelector(
       `[data-marquee-id="${marqueeId}"]`
@@ -105,31 +106,120 @@ const hasContent = text || (images && images.length > 0);
     const text = container?.querySelector(".marquee-text");
     const images = container?.querySelector(".marquee-images");
 
-    function checkAndSetAnimation() {
+    function setupMarquee() {
       if (container && content) {
         // Check if content overflows container
         const containerWidth = container.offsetWidth;
-        let contentWidth = 0;
+        let singleContentWidth = 0;
 
         if (text) {
-          contentWidth = text.offsetWidth;
+          // For text, measure the first span only (since we duplicate it)
+          singleContentWidth = text.offsetWidth;
         } else if (images) {
-          contentWidth = images.offsetWidth;
+          // For images, measure the first div only (since we duplicate it)
+          singleContentWidth = images.offsetWidth;
         }
 
-        if (contentWidth <= containerWidth) {
+        if (singleContentWidth <= containerWidth && !alwaysLoop) {
           // Content fits, no need to animate
           content.style.animation = "none";
           content.style.justifyContent = "center";
         } else {
-          // Content overflows, ensure animation is running
+          // Content overflows or alwaysLoop is true, create custom animation
           content.style.animation = "";
           content.style.justifyContent = "";
+          
+          // Create a custom keyframe animation with the exact distance
+          const animationName = `marquee-${marqueeId}`;
+          
+          // Remove existing style if any
+          const existingStyle = document.getElementById(`style-${marqueeId}`);
+          if (existingStyle) {
+            existingStyle.remove();
+          }
+          
+          // Create new style element with custom animation
+          const style = document.createElement('style');
+          style.id = `style-${marqueeId}`;
+          style.textContent = `
+            @keyframes ${animationName} {
+              0% {
+                transform: translateX(0px);
+              }
+              100% {
+                transform: translateX(-${singleContentWidth}px);
+              }
+            }
+            [data-marquee-id="${marqueeId}"] .marquee-content {
+              animation: ${animationName} var(--speed) linear infinite;
+            }
+          `;
+          document.head.appendChild(style);
         }
       }
     }
 
+    // Function to update marquee text and trigger recalculation
+    function updateMarqueeText(newText) {
+      if (text) {
+        const textElements = container.querySelectorAll('.marquee-text');
+        textElements.forEach(element => {
+          element.textContent = newText;
+        });
+        // Trigger recalculation after a small delay to ensure layout update
+        setTimeout(setupMarquee, 50);
+      }
+    }
+
+    // Expose update function globally for external access
+    if (container) {
+      container.updateText = updateMarqueeText;
+    }
+
     if (container && content) {
+      // Setup MutationObserver to watch for text content changes
+      if (text) {
+        const observer = new MutationObserver((mutations) => {
+          let shouldUpdate = false;
+          mutations.forEach((mutation) => {
+            if (mutation.type === 'childList' || mutation.type === 'characterData') {
+              shouldUpdate = true;
+            }
+          });
+          
+          if (shouldUpdate) {
+            // Debounce the setup call to avoid excessive recalculations
+            clearTimeout(container._updateTimeout);
+            container._updateTimeout = setTimeout(setupMarquee, 100);
+          }
+        });
+
+        // Observe text content changes in all marquee text elements
+        const textElements = container.querySelectorAll('.marquee-text');
+        textElements.forEach(element => {
+          observer.observe(element, {
+            childList: true,
+            characterData: true,
+            subtree: true
+          });
+        });
+
+        // Store observer for cleanup if needed
+        container._observer = observer;
+      }
+
+      // Add custom event listener for manual updates
+      container.addEventListener('marquee-update', () => {
+        setTimeout(setupMarquee, 50);
+      });
+
+      // Add custom event listener for text updates
+      container.addEventListener('marquee-text-update', (event) => {
+        if (event.detail && event.detail.text) {
+          updateMarqueeText(event.detail.text);
+        }
+      });
+
       // If we have images, wait for them to load before checking
       if (images) {
         const imageElements = images.querySelectorAll('img');
@@ -137,7 +227,7 @@ const hasContent = text || (images && images.length > 0);
         const totalImages = imageElements.length;
 
         if (totalImages === 0) {
-          checkAndSetAnimation();
+          setTimeout(setupMarquee, 100);
           return;
         }
 
@@ -145,7 +235,7 @@ const hasContent = text || (images && images.length > 0);
           loadedImages++;
           if (loadedImages === totalImages) {
             // Small delay to ensure layout is complete
-            setTimeout(checkAndSetAnimation, 100);
+            setTimeout(setupMarquee, 100);
           }
         }
 
@@ -158,9 +248,16 @@ const hasContent = text || (images && images.length > 0);
           }
         });
       } else {
-        // For text content, check immediately
-        checkAndSetAnimation();
+        // For text content, check after a small delay to ensure layout is complete
+        setTimeout(setupMarquee, 100);
       }
+      
+      // Also setup on resize
+      let resizeTimeout;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(setupMarquee, 250);
+      });
     }
   });
 </script>

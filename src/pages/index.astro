@@ -15,6 +15,8 @@ import TooltipContent from "../components/TooltipContent.astro";
 import Marquee from "../components/Marquee.astro";
 import InterestsSection from "../components/InterestsSection.astro";
 
+export const prerender = false;
+
 interface Frontmatter {
   frontmatter: {
     title: string;
@@ -310,11 +312,35 @@ const webButtons = [
                 />
               </Card>
               <Card
-                bgColor="bg-gray-100 flex flex-col items-center justify-center gap-2"
+                bgColor="bg-gray-100 flex flex-col items-center justify-center gap-2 relative"
               >
+                <div
+                  class="absolute bottom-1 right-[0.163rem] w-8 cursor-pointer"
+                >
+                  <Tooltip triggerMode="hover" offset={{ x: 0, y: 10 }}>
+                    <Content slot="content">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        width="24"
+                        class="text-light-gray hover:text-teal transition-colors"
+                        ><path d="M0 0h24v24H0V0z" fill="none"></path><path
+                          d="M13 7h-2v2h2V7zm0 4h-2v6h2v-6zM5 1v22h14V1H5zm12 18H7V5h10v14z"
+                        ></path></svg
+                      >
+                    </Content>
+                    <TooltipContent slot="tooltip">
+                      this music player uses youtube embeds. by using this, you
+                      agree to the youtube terms of service and privacy policy.
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
                 <Marquee
                   text="Loading Music Player... Please wait..."
                   speed={15}
+                  alwaysLoop={true}
                   className="font-analogue text-lg font-bold text-gray-900 w-full text-center"
                 />
                 <div class="w-full">
@@ -714,8 +740,6 @@ const webButtons = [
   }
 
   async function updateCurrentSong() {
-    // Find all marquee text elements and update them
-    const marqueeElements = document.querySelectorAll(".marquee-text");
     // Get the current song from the YouTube player, if available
     let currentSong = null;
     if (youtubePlayer && typeof youtubePlayer.getVideoData === "function") {
@@ -738,9 +762,22 @@ const webButtons = [
         videoData && videoData.title ? videoData.title : null
       ).replace(/^Pearto$/, "Teto Pear - Kasane Teto");
       console.log(currentSong);
-      marqueeElements.forEach((element) => {
-        element.textContent = currentSong;
-      });
+
+      // Find marquee container and update text using the new API
+      const marqueeContainer = document.querySelector("[data-marquee-id]");
+      if (marqueeContainer && currentSong) {
+        // Method 1: Use the exposed updateText function
+        if (marqueeContainer.updateText) {
+          marqueeContainer.updateText(currentSong);
+        } else {
+          // Method 2: Use custom event as fallback
+          marqueeContainer.dispatchEvent(
+            new CustomEvent("marquee-text-update", {
+              detail: { text: currentSong },
+            })
+          );
+        }
+      }
     }
   }
 
@@ -802,6 +839,9 @@ const webButtons = [
     }
     &::-webkit-progress-bar {
       background: var(--progress-bg-color);
+    }
+    &::-webkit-progress-value {
+      background: var(--progress-bar-color);
     }
   }
 </style>
