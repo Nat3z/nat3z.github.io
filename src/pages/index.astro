@@ -39,7 +39,7 @@ const recentPost = posts[0]; // Get the most recent post
 
 // okay to get the pronouns we use the pronouns.page api
 const PROFILE_NAME = "natia";
-let pronounParts: { value: string }[] = [];
+let pronounParts: { value: string; opinion: string }[] = [];
 
 const PRONOUNS_CACHE_KEY = "pronounsData";
 const PERSONAL_DATA_CACHE_KEY = "personalData";
@@ -50,7 +50,7 @@ if (isDev && (globalThis as any)[PRONOUNS_CACHE_KEY]) {
   pronounParts = (globalThis as any)[PRONOUNS_CACHE_KEY];
 } else {
   const pronouns = await fetch(
-    `https://en.pronouns.page/api/profile/get/${PROFILE_NAME}?version=2`
+    `https://en.pronouns.page/api/profile/get/${PROFILE_NAME}?version=2&props=pronouns`
   );
   const pronounsData = await pronouns.json();
   pronounParts = pronounsData.profiles.en.pronouns;
@@ -58,6 +58,7 @@ if (isDev && (globalThis as any)[PRONOUNS_CACHE_KEY]) {
     (globalThis as any)[PRONOUNS_CACHE_KEY] = pronounParts;
   }
 }
+console.log(pronounParts);
 
 // Fetch personal data (interests, DNI, playlist) from Google Apps Script
 let personalData: {
@@ -248,9 +249,10 @@ const webButtons = [
                       >
                         {
                           pronounParts
-                            .slice(0, 2)
-                            .map((pronoun: { value: string }) =>
-                              pronoun.value.split("/")
+                            .map((pronoun) =>
+                              pronoun.opinion === "yes"
+                                ? pronoun.value.split("/")
+                                : []
                             )
                             .flat()
                             .filter((_, i) => i % 2 === 0)
