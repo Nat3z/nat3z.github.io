@@ -198,6 +198,38 @@ const webButtons = [
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   </script>
 
+  <script>
+    // countdown to estrogen
+    const estrogenDate = new Date("2026-05-07");
+    const estrogenInterval = () => {
+      const now = new Date();
+      const timeDifference = estrogenDate.getTime() - now.getTime();
+      const days = Math.max(
+        0,
+        Math.floor(timeDifference / (1000 * 60 * 60 * 24))
+      );
+      const hours = Math.max(
+        0,
+        Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+      );
+      const minutes = Math.max(
+        0,
+        Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60))
+      );
+      const seconds = Math.max(
+        0,
+        Math.floor((timeDifference % (1000 * 60)) / 1000)
+      );
+
+      document.getElementById("daysValue")!.textContent = days.toString();
+      document.getElementById("hoursValue")!.textContent = hours.toString();
+      document.getElementById("minutesValue")!.textContent = minutes.toString();
+      document.getElementById("secondsValue")!.textContent = seconds.toString();
+    };
+    estrogenInterval();
+    setInterval(estrogenInterval, 1000);
+  </script>
+
   <div class="flex flex-col items-center justify-center min-h-screen">
     <div
       class="flex flex-col items-center justify-center w-11/12 md:w-10/12 lg:w-8/12"
@@ -266,6 +298,7 @@ const webButtons = [
                   </Tooltip>
                 </div>
               </Card>
+
               <Card bgColor="bg-gray-100">
                 <p class="font-analogue text-center text-lg">Socials</p>
                 <div class="flex flex-row gap-2 items-center justify-center">
@@ -294,6 +327,32 @@ const webButtons = [
                   />
                 </div>
               </Card>
+
+              <Card bgColor="bg-gray-100">
+                <p class="font-analogue text-center text-lg mb-2">
+                  Countdown to HRT
+                </p>
+                <div class="grid grid-cols-4 gap-2">
+                  {
+                    ["days", "hours", "minutes", "seconds"].map((unit) => (
+                      <div class="flex flex-col items-center justify-center gap-2">
+                        <div class="flex flex-col items-center justify-center w-10 h-12 bg-gray-200">
+                          <p
+                            class="font-analogue text-center text-lg"
+                            id={`${unit}Value`}
+                          >
+                            -
+                          </p>
+                        </div>
+                        <p class="font-analogue text-center text-[0.4rem] text-gray-400">
+                          {unit.toUpperCase()}
+                        </p>
+                      </div>
+                    ))
+                  }
+                </div>
+              </Card>
+
               <Card bgColor="bg-gray-100">
                 <InterestsSection
                   title="Interests!"
@@ -466,7 +525,7 @@ const webButtons = [
                 </span>
                 <p class="font-analogue text-left text-lg w-full">
                   you may know me as that one person who makes autism-coded
-                  videos on SIGNALIS, the person helping you track time
+                  videos on youtube, the person helping you track time
                   throughout the day, the developer of <a
                     href="https://ogi.nat3z.com"
                     target="_blank"
@@ -595,9 +654,6 @@ const webButtons = [
                   <a
                     href="https://github.com/nat3z/nat3z.github.io"
                     class="underline text-teal hover:text-dark-teal">GitHub</a
-                  >. Read the <a
-                    href="/license"
-                    class="underline text-teal hover:text-dark-teal">license</a
                   >.
                 </p>
               </Card>
