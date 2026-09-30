@@ -22,7 +22,7 @@ interface Frontmatter {
 const posts = (await Astro.glob<Frontmatter>("./blog/*.{md,mdx}")).sort(
   (a, b) =>
     new Date(b.frontmatter.published).valueOf() -
-    new Date(a.frontmatter.published).valueOf()
+    new Date(a.frontmatter.published).valueOf(),
 );
 
 // Extract all unique tags and years for filter options
@@ -31,7 +31,7 @@ const allTags = [
 ].sort();
 const allYears = [
   ...new Set(
-    posts.map((post) => new Date(post.frontmatter.published).getFullYear())
+    posts.map((post) => new Date(post.frontmatter.published).getFullYear()),
   ),
 ].sort((a, b) => b - a);
 ---
@@ -40,48 +40,28 @@ const allYears = [
   title="Blog | Nat3z"
   description="My thoughts, experiences, and technical adventures"
 >
-  <div
-    class="flex flex-col items-center justify-center min-h-screen py-4 md:py-8"
-  >
-    <div
-      class="flex flex-col items-center justify-center w-11/12 md:w-10/12 lg:w-8/12 max-w-4xl"
-    >
+  <div class="flex flex-col items-center justify-center min-h-screen py-4 md:py-8">
+    <div class="flex flex-col items-center justify-center w-11/12 md:w-10/12 lg:w-8/12 max-w-4xl">
       <Header title="Blog" />
       <main class="w-full">
         <div class="flex flex-col items-start justify-start pt-4">
           <!-- Welcome Header -->
           <div class="w-full mb-6 md:mb-8 relative overflow-hidden">
             <!-- Background gradient and pattern -->
-            <div
-              class="absolute inset-0 bg-gradient-to-br from-teal via-teal to-dark-teal"
-            >
-            </div>
+            <div class="absolute inset-0 bg-gradient-to-br from-teal via-teal to-dark-teal"></div>
             <div class="absolute inset-0 opacity-10">
-              <div
-                class="absolute top-0 left-0 w-32 h-32 bg-white rounded-full -translate-x-16 -translate-y-16"
-              >
-              </div>
-              <div
-                class="absolute bottom-0 right-0 w-24 h-24 bg-white rounded-full translate-x-12 translate-y-12"
-              >
-              </div>
-              <div
-                class="absolute top-1/2 right-1/4 w-16 h-16 bg-white rounded-full"
-              >
-              </div>
+              <div class="absolute top-0 left-0 w-32 h-32 bg-white rounded-full -translate-x-16 -translate-y-16"></div>
+              <div class="absolute bottom-0 right-0 w-24 h-24 bg-white rounded-full translate-x-12 translate-y-12"></div>
+              <div class="absolute top-1/2 right-1/4 w-16 h-16 bg-white rounded-full"></div>
             </div>
 
             <!-- Content -->
             <div class="relative z-0 p-4 md:p-8 lg:p-10 text-center">
               <div class="flex flex-col gap-3 md:gap-4">
-                <h1
-                  class="font-analogue text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight"
-                >
+                <h1 class="font-analogue text-2xl md:text-4xl lg:text-5xl font-bold text-white leading-tight">
                   Welcome to my blog!
                 </h1>
-                <p
-                  class="font-analogue text-lg md:text-xl lg:text-2xl text-white/95 leading-relaxed max-w-3xl mx-auto"
-                >
+                <p class="font-analogue text-lg md:text-xl lg:text-2xl text-white/95 leading-relaxed max-w-3xl mx-auto">
                   Here's where I share my thoughts, experiences, and technical
                   adventures. From coding projects to random musings, you'll
                   find it all here.
@@ -100,9 +80,7 @@ const allYears = [
               <div class="flex flex-col gap-3">
                 <!-- Search Bar -->
                 <div class="relative">
-                  <div
-                    class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-                  >
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <svg
                       class="h-4 w-4 text-gray-400"
                       fill="none"
@@ -113,7 +91,8 @@ const allYears = [
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      ></path>
                     </svg>
                   </div>
                   <input
@@ -132,7 +111,9 @@ const allYears = [
                     class="font-analogue px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-teal focus:border-transparent outline-none bg-white"
                   >
                     <option value="">All Tags</option>
-                    {allTags.map((tag) => <option value={tag}>#{tag}</option>)}
+                    {allTags.map((tag) => (
+                      <option value={tag}>#{tag}</option>
+                    ))}
                   </select>
 
                   <!-- Year Filter -->
@@ -141,11 +122,9 @@ const allYears = [
                     class="font-analogue px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-teal focus:border-transparent outline-none bg-white"
                   >
                     <option value="">All Years</option>
-                    {
-                      allYears.map((year) => (
-                        <option value={year}>{year}</option>
-                      ))
-                    }
+                    {allYears.map((year) => (
+                      <option value={year}>{year}</option>
+                    ))}
                   </select>
 
                   <!-- Status Filter -->
@@ -161,9 +140,7 @@ const allYears = [
               </div>
 
               <!-- Bottom row with clear button and counter -->
-              <div
-                class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-2 border-t border-gray-100"
-              >
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-2 border-t border-gray-100">
                 <button
                   id="clearFilters"
                   class="font-analogue px-3 py-1 text-xs text-teal hover:text-dark-teal hover:bg-teal/10 transition-colors rounded border border-teal w-fit"
@@ -200,9 +177,7 @@ const allYears = [
                     d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.314 16.5c-.77.833.192 2.5 1.732 2.5z"
                   ></path>
                 </svg>
-                <h3
-                  class="mt-2 font-analogue text-sm font-medium text-gray-900"
-                >
+                <h3 class="mt-2 font-analogue text-sm font-medium text-gray-900">
                   No posts found
                 </h3>
                 <p class="mt-1 font-analogue text-sm text-gray-500">
@@ -214,109 +189,101 @@ const allYears = [
 
           <!-- Posts List -->
           <div id="postsContainer" class="w-full space-y-2 relative">
-            {
-              posts.length === 0 ? (
-                <Card bgColor="bg-gray-100" className="w-full">
-                  <p class="font-analogue text-center text-lg text-gray-600">
-                    No blog posts yet... but they're coming soon! 👀
-                  </p>
-                </Card>
-              ) : (
-                posts.map((post) => (
-                  <a
-                    href={`/blog/${post.frontmatter.id}`}
-                    class="blog-post block w-full transition-all hover:shadow-md group"
-                    data-title={post.frontmatter.title.toLowerCase()}
-                    data-description={post.frontmatter.description.toLowerCase()}
-                    data-tags={(post.frontmatter.tags || []).join(",")}
-                    data-year={new Date(
-                      post.frontmatter.published
-                    ).getFullYear()}
-                    data-outdated={post.frontmatter.outdated}
-                  >
-                    <div class="bg-gray-100 hover:bg-gray-50 transition-colors duration-200 p-3 md:p-4 border-l-4 border-transparent hover:border-teal relative">
-                      {post.frontmatter.outdated && (
-                        <Tooltip
-                          triggerMode="hover"
-                          position="cursor"
-                          offset={{ x: 0, y: 10 }}
-                          tooltipClass="w-60"
-                        >
-                          <Content slot="content">
-                            <div class="absolute top-3 right-3 text-red-500">
-                              <svg
-                                class="w-4 h-4"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                                  clip-rule="evenodd"
-                                />
-                              </svg>
+            {posts.length === 0 ? (
+              <Card bgColor="bg-gray-100" className="w-full">
+                <p class="font-analogue text-center text-lg text-gray-600">
+                  No blog posts yet... but they're coming soon! 👀
+                </p>
+              </Card>
+            ) : (
+              posts.map((post) => (
+                <a
+                  href={`/blog/${post.frontmatter.id}`}
+                  class="blog-post block w-full transition-all hover:shadow-md group"
+                  data-title={post.frontmatter.title.toLowerCase()}
+                  data-description={post.frontmatter.description.toLowerCase()}
+                  data-tags={(post.frontmatter.tags || []).join(",")}
+                  data-year={new Date(post.frontmatter.published).getFullYear()}
+                  data-outdated={post.frontmatter.outdated}
+                >
+                  <div class="bg-gray-100 hover:bg-gray-50 transition-colors duration-200 p-3 md:p-4 border-l-4 border-transparent hover:border-teal relative">
+                    {post.frontmatter.outdated && (
+                      <Tooltip
+                        triggerMode="hover"
+                        position="cursor"
+                        offset={{ x: 0, y: 10 }}
+                        tooltipClass="w-60"
+                      >
+                        <Content slot="content">
+                          <div class="absolute top-3 right-3 text-red-500">
+                            <svg
+                              class="w-4 h-4"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path
+                                fill-rule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                clip-rule="evenodd"
+                              />
+                            </svg>
+                          </div>
+                        </Content>
+                        <TooltipContent slot="tooltip">
+                          This post might be outdated
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
+
+                    <div class="flex flex-col gap-3">
+                      <div class="flex-1 min-w-0">
+                        <h2 class="font-analogue text-base md:text-lg font-bold text-gray-900 group-hover:text-teal transition-colors">
+                          {post.frontmatter.title}
+                        </h2>
+                        <p class="font-analogue text-sm text-gray-600 mt-1 leading-relaxed">
+                          {post.frontmatter.description}
+                        </p>
+                      </div>
+
+                      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                        <p class="font-analogue text-xs text-gray-500">
+                          {new Date(
+                            post.frontmatter.published,
+                          ).toLocaleDateString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
+                          })}
+                        </p>
+
+                        {post.frontmatter.tags &&
+                          post.frontmatter.tags.length > 0 && (
+                            <div class="flex flex-wrap gap-1">
+                              {post.frontmatter.tags.slice(0, 3).map((tag) => (
+                                <span class="font-analogue text-xs bg-teal text-white px-2 py-1">
+                                  #{tag}
+                                </span>
+                              ))}
+                              {post.frontmatter.tags.length > 3 && (
+                                <span class="font-analogue text-xs text-gray-500">
+                                  +{post.frontmatter.tags.length - 3}
+                                </span>
+                              )}
                             </div>
-                          </Content>
-                          <TooltipContent slot="tooltip">
-                            This post might be outdated
-                          </TooltipContent>
-                        </Tooltip>
-                      )}
-
-                      <div class="flex flex-col gap-3">
-                        <div class="flex-1 min-w-0">
-                          <h2 class="font-analogue text-base md:text-lg font-bold text-gray-900 group-hover:text-teal transition-colors">
-                            {post.frontmatter.title}
-                          </h2>
-                          <p class="font-analogue text-sm text-gray-600 mt-1 leading-relaxed">
-                            {post.frontmatter.description}
-                          </p>
-                        </div>
-
-                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                          <p class="font-analogue text-xs text-gray-500">
-                            {new Date(
-                              post.frontmatter.published
-                            ).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                            })}
-                          </p>
-
-                          {post.frontmatter.tags &&
-                            post.frontmatter.tags.length > 0 && (
-                              <div class="flex flex-wrap gap-1">
-                                {post.frontmatter.tags
-                                  .slice(0, 3)
-                                  .map((tag) => (
-                                    <span class="font-analogue text-xs bg-teal text-white px-2 py-1">
-                                      #{tag}
-                                    </span>
-                                  ))}
-                                {post.frontmatter.tags.length > 3 && (
-                                  <span class="font-analogue text-xs text-gray-500">
-                                    +{post.frontmatter.tags.length - 3}
-                                  </span>
-                                )}
-                              </div>
-                            )}
-                        </div>
+                          )}
                       </div>
                     </div>
-                  </a>
-                ))
-              )
-            }
+                  </div>
+                </a>
+              ))
+            )}
           </div>
 
           <Card bgColor="bg-gray-100" className="w-full mt-6 md:mt-8">
-            <p
-              class="font-analogue text-center text-base md:text-lg text-gray-600"
-            >
+            <p class="font-analogue text-center text-base md:text-lg text-gray-600">
               Want to stay updated? Follow me on
               <a
-                href="https://x.com/nat3zdev"
+                href="https://x.com/shardevlol"
                 target="_blank"
                 class="underline text-teal hover:text-dark-teal transition-colors"
               >
@@ -329,7 +296,8 @@ const allYears = [
                 class="underline text-teal hover:text-dark-teal transition-colors"
               >
                 GitHub
-              </a>!
+              </a>
+              !
             </p>
           </Card>
         </div>
