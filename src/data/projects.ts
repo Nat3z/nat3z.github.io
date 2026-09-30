@@ -38,3 +38,62 @@ export const projects: Project[] = [
     writeup: "/blog/creating-a-schedule-site",
   },
 ];
+
+export interface MoreProject {
+  name: string;
+  href: string;
+  description: string;
+  language: string;
+}
+
+// smaller projects, listed in the "more projects" dropdown under the cards
+export const moreProjects: MoreProject[] = [
+  {
+    name: "osuautodeafen",
+    href: "https://github.com/Nat3z/osuautodeafen",
+    description: "the discord auto deafener for osu!, built in go.",
+    language: "Go",
+  },
+  {
+    name: "balatro-music-patch",
+    href: "https://github.com/Nat3z/balatro-music-patch",
+    description: "a simple music patcher for balatro that patches in music from dom palombi.",
+    language: "Python",
+  },
+  {
+    name: "yeet.nvim",
+    href: "https://github.com/Nat3z/yeet.nvim",
+    description: "yeet your changes to git even faster.",
+    language: "Lua",
+  },
+  {
+    name: "CozyParty",
+    href: "https://github.com/Nat3z/CozyParty",
+    description: "cozy party-esque games for your friends to play :3",
+    language: "Java",
+  },
+  {
+    name: "Hackpad",
+    href: "https://github.com/Nat3z/Hackpad",
+    description: "a 3 key keypad with a rotary encoder, made for hack club's hackpad project.",
+    language: "Python",
+  },
+  {
+    name: "innerhcb",
+    href: "https://github.com/Nat3z/innerhcb",
+    description: "npm package to send authenticated requests to hcb.",
+    language: "TypeScript",
+  },
+  {
+    name: "FragBot",
+    href: "https://github.com/Nat3z/FragBot",
+    description: "the hypixel skyblock frag bot.",
+    language: "TypeScript",
+  },
+  {
+    name: "nixos",
+    href: "https://github.com/Nat3z/nixos",
+    description: "my nixos configuration.",
+    language: "Nix",
+  },
+];

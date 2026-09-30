@@ -1,6 +1,6 @@
 ---
 import Card from "./Card.astro";
-import { projects } from "../data/projects";
+import { projects, moreProjects } from "../data/projects";
 ---
 
 <Card bgColor="bg-gray-100">
@@ -66,6 +66,50 @@ import { projects } from "../data/projects";
       })
     }
   </div>
+
+  <details class="more-projects group/more w-full mt-2 border-2 border-dark-gray">
+    <summary class="flex flex-row items-center justify-between px-4 py-2 bg-light-gray hover:bg-teal/75 font-analogue text-lg cursor-pointer select-none transition-colors">
+      more projects
+      {/* pixel art arrow, each rect is one "pixel" on a 7x4 grid */}
+      <svg
+        viewBox="0 0 7 4"
+        shape-rendering="crispEdges"
+        fill="currentColor"
+        aria-hidden="true"
+        class="w-[21px] h-[12px] transition-transform group-open/more:rotate-180"
+      >
+        <rect x="0" y="0" width="7" height="1" />
+        <rect x="1" y="1" width="5" height="1" />
+        <rect x="2" y="2" width="3" height="1" />
+        <rect x="3" y="3" width="1" height="1" />
+      </svg>
+    </summary>
+    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-dark-gray border-t-2 border-dark-gray">
+      {
+        moreProjects.map((project) => (
+          <li class="bg-white">
+            <a
+              href={project.href}
+              target="_blank"
+              class="group/item flex flex-col gap-1 h-full px-4 py-3 border-l-4 border-transparent hover:border-teal hover:bg-gray-50 transition-colors"
+            >
+              <span class="flex flex-row items-baseline justify-between gap-2">
+                <span class="font-analogue text-base font-bold text-gray-900 group-hover/item:text-teal transition-colors">
+                  {project.name}
+                </span>
+                <span class="font-analogue text-xs text-gray-500">
+                  {project.language}
+                </span>
+              </span>
+              <span class="font-analogue text-sm text-gray-600">
+                {project.description}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </details>
 </Card>
 
 <script>
@@ -142,6 +186,14 @@ import { projects } from "../data/projects";
 </script>
 
 <style>
+  /* hide the default disclosure triangle, the summary has its own ▼ */
+  .more-projects summary {
+    list-style: none;
+  }
+  .more-projects summary::-webkit-details-marker {
+    display: none;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     .project-backdrop {
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -149,6 +201,17 @@ import { projects } from "../data/projects";
     .project:hover .project-backdrop,
     .project:focus-within .project-backdrop {
       transform: scale(1.04);
+    }
+
+    .more-projects[open] ul {
+      animation: more-projects-open 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes more-projects-open {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
     }
   }
 </style>
