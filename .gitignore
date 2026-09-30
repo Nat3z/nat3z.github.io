@@ -20,3 +20,6 @@ pnpm-debug.log*
 
 # vercel build output
 .vercel/
+
+# astro generated types and cache
+.astro/
