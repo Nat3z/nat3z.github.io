@@ -1,5 +1,6 @@
 ---
 import Card from "./Card.astro";
+import PixelArrow from "./PixelArrow.astro";
 import { projects, moreProjects } from "../data/projects";
 ---
 
@@ -70,19 +71,7 @@ import { projects, moreProjects } from "../data/projects";
   <details class="more-projects group/more w-full mt-2 border-2 border-dark-gray">
     <summary class="flex flex-row items-center justify-between px-4 py-2 bg-light-gray hover:bg-teal/75 font-analogue text-lg cursor-pointer select-none transition-colors">
       more projects
-      {/* pixel art arrow, each rect is one "pixel" on a 7x4 grid */}
-      <svg
-        viewBox="0 0 7 4"
-        shape-rendering="crispEdges"
-        fill="currentColor"
-        aria-hidden="true"
-        class="w-[21px] h-[12px] transition-transform group-open/more:rotate-180"
-      >
-        <rect x="0" y="0" width="7" height="1" />
-        <rect x="1" y="1" width="5" height="1" />
-        <rect x="2" y="2" width="3" height="1" />
-        <rect x="3" y="3" width="1" height="1" />
-      </svg>
+      <PixelArrow class="group-open/more:rotate-180" />
     </summary>
     <ul class="grid grid-cols-1 sm:grid-cols-2 gap-px bg-dark-gray border-t-2 border-dark-gray">
       {
@@ -186,7 +175,7 @@ import { projects, moreProjects } from "../data/projects";
 </script>
 
 <style>
-  /* hide the default disclosure triangle, the summary has its own ▼ */
+  /* hide the default disclosure triangle, the summary has its own PixelArrow */
   .more-projects summary {
     list-style: none;
   }

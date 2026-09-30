@@ -42,6 +42,7 @@ const dropdownId = `dropdown-${Math.random().toString(36).substr(2, 9)}`;
 
   function closeDropdown() {
     content.classList.add("hidden");
+    wrapper.removeAttribute("data-open");
     window.openDropdowns.delete(dropdownId);
   }
 
@@ -54,6 +55,7 @@ const dropdownId = `dropdown-${Math.random().toString(36).substr(2, 9)}`;
         );
         if (otherContent) {
           otherContent.classList.add("hidden");
+          otherContent.parentElement.removeAttribute("data-open");
         }
       }
     });
@@ -62,6 +64,8 @@ const dropdownId = `dropdown-${Math.random().toString(36).substr(2, 9)}`;
     window.openDropdowns.clear();
     window.openDropdowns.add(dropdownId);
     content.classList.remove("hidden");
+    // lets triggers style themselves, e.g. flipping a PixelArrow
+    wrapper.setAttribute("data-open", "");
   }
 
   if (trigger && content) {

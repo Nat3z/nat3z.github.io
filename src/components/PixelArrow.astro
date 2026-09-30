@@ -1,0 +1,21 @@
+---
+export interface Props {
+  class?: string;
+}
+
+const { class: className = "" } = Astro.props;
+---
+
+<!-- pixel art down arrow, each rect is one "pixel" on a 7x4 grid -->
+<svg
+  viewBox="0 0 7 4"
+  shape-rendering="crispEdges"
+  fill="currentColor"
+  aria-hidden="true"
+  class:list={["pixel-arrow w-[21px] h-[12px] transition-transform", className]}
+>
+  <rect x="0" y="0" width="7" height="1"></rect>
+  <rect x="1" y="1" width="5" height="1"></rect>
+  <rect x="2" y="2" width="3" height="1"></rect>
+  <rect x="3" y="3" width="1" height="1"></rect>
+</svg>
