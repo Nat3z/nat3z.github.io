@@ -1,0 +1,154 @@
+---
+import Card from "./Card.astro";
+import { projects } from "../data/projects";
+---
+
+<Card bgColor="bg-gray-100">
+  <p class="font-analogue text-left text-lg w-full">Projects</p>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full mt-2">
+    {
+      projects.map((project, i) => {
+        const featured: boolean = i === 0;
+        return (
+          <div
+            class:list={[
+              "project group relative isolate flex flex-col justify-end overflow-hidden border-2 border-dark-gray bg-dark-gray hover:border-teal focus-within:border-teal transition-colors",
+              featured ? "sm:col-span-2 aspect-[4/3] sm:aspect-[16/7]" : "aspect-[4/3]",
+            ]}
+          >
+            <img
+              src={project.image}
+              alt={`screenshot of ${project.name}`}
+              loading="lazy"
+              class="project-backdrop absolute inset-0 -z-10 w-full h-full object-cover object-top"
+            />
+            <div class="absolute inset-0 -z-10 bg-gradient-to-t from-dark-gray via-dark-gray/75 to-dark-gray/10" />
+
+            {/* kept in normal flow so the link's ::after stretches over the whole card, not just this block */}
+            <div class="flex flex-col gap-1 p-4">
+              <h3
+                class:list={[
+                  "font-analogue text-white",
+                  featured ? "text-3xl" : "text-2xl",
+                ]}
+              >
+                {/* stretched link so the whole card is clickable */}
+                <a
+                  href={project.href}
+                  data-project-link
+                  data-image={project.image}
+                  data-name={project.name}
+                  class="flex flex-row items-center gap-2 after:absolute after:inset-0 group-hover:text-teal transition-colors focus:outline-none"
+                >
+                  {project.name}
+                  <img src="/open_in_new.svg" alt="" class="w-4 h-4 invert" />
+                </a>
+              </h3>
+              <p
+                class:list={[
+                  "font-analogue text-sm text-white/85",
+                  featured ? "max-w-[55ch]" : "line-clamp-3",
+                ]}
+              >
+                {project.description}
+              </p>
+              {project.writeup && (
+                <a
+                  href={project.writeup}
+                  class="relative font-analogue text-sm text-teal hover:text-white underline w-max"
+                >
+                  read the devlog →
+                </a>
+              )}
+            </div>
+          </div>
+        );
+      })
+    }
+  </div>
+</Card>
+
+<script>
+  // on click, the card grows to fill the screen before navigating so leaving feels continuous
+  const DURATION: number = 550;
+  const EASING: string = "cubic-bezier(0.16, 1, 0.3, 1)";
+
+  let overlay: HTMLDivElement | null = null;
+
+  function expandAndNavigate(link: HTMLAnchorElement): void {
+    const card: HTMLElement = link.closest(".project") as HTMLElement;
+    const rect: DOMRect = card.getBoundingClientRect();
+
+    overlay = document.createElement("div");
+    overlay.className =
+      "fixed z-[9990] overflow-hidden border-2 border-teal bg-dark-gray pointer-events-none";
+    overlay.innerHTML = `
+      <img src="${link.dataset.image}" alt="" class="absolute inset-0 w-full h-full object-cover object-top" />
+      <div class="absolute inset-0 bg-gradient-to-t from-dark-gray via-dark-gray/75 to-dark-gray/10"></div>
+      <p class="project-overlay-label absolute left-8 bottom-8 font-analogue text-3xl text-white opacity-0">
+        opening ${link.dataset.name}...
+      </p>
+    `;
+    document.body.appendChild(overlay);
+
+    const from: Keyframe = {
+      top: `${rect.top}px`,
+      left: `${rect.left}px`,
+      width: `${rect.width}px`,
+      height: `${rect.height}px`,
+    };
+    const to: Keyframe = { top: "0px", left: "0px", width: "100vw", height: "100vh" };
+
+    const grow: Animation = overlay.animate([from, to], {
+      duration: DURATION,
+      easing: EASING,
+      fill: "forwards",
+    });
+    overlay
+      .querySelector(".project-overlay-label")!
+      .animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 250,
+        delay: DURATION - 150,
+        fill: "forwards",
+      });
+
+    grow.finished.then(() => {
+      window.location.href = link.href;
+    });
+  }
+
+  document.querySelectorAll<HTMLAnchorElement>("[data-project-link]").forEach((link) => {
+    link.addEventListener("click", (event: MouseEvent) => {
+      // leave new-tab clicks and reduced motion alone
+      const newTab: boolean =
+        event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0;
+      const reduceMotion: boolean = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      if (newTab || reduceMotion || overlay) return;
+
+      event.preventDefault();
+      expandAndNavigate(link);
+    });
+  });
+
+  // coming back via the back button restores the page from cache, so clear the overlay
+  window.addEventListener("pageshow", (event: PageTransitionEvent) => {
+    if (event.persisted && overlay) {
+      overlay.remove();
+      overlay = null;
+    }
+  });
+</script>
+
+<style>
+  @media (prefers-reduced-motion: no-preference) {
+    .project-backdrop {
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .project:hover .project-backdrop,
+    .project:focus-within .project-backdrop {
+      transform: scale(1.04);
+    }
+  }
+</style>

@@ -2,6 +2,7 @@
 import DropdownButton from "./DropdownButton.astro";
 import DropdownItem from "./DropdownItem.astro";
 import Subheader from "./Subheader.astro";
+import { projects } from "../data/projects";
 
 export interface Props {
   title: string;
@@ -12,9 +13,7 @@ const { title } = Astro.props;
 const PROFILE_NAME = "natia";
 ---
 
-<header
-  class="flex flex-row items-center justify-start border-dark-gray border-2 py-2 px-4 bg-dark-teal w-full"
->
+<header class="flex flex-row items-center justify-start border-dark-gray border-2 py-2 px-4 bg-dark-teal w-full">
   <h1 class="font-analogue text-4xl">{title}</h1>
 </header>
 <Subheader>
@@ -27,41 +26,22 @@ const PROFILE_NAME = "natia";
     </a>
     <DropdownButton triggerMode="click">
       <div slot="trigger">
-        <button> Projects ▼ </button>
+        <button>Projects ▼</button>
       </div>
 
       <div slot="content" class="py-1">
-        <DropdownItem
-          href="https://ogi.nat3z.com"
-          icon="/open_in_new.svg"
-          tooltip="a video game management and installation tool"
-          tooltipPosition="right"
-          tooltipOffset={{ x: 0, y: 10 }}
-          tooltipTriggerMode="hover"
-        >
-          OpenGameInstaller
-        </DropdownItem>
-        <DropdownItem
-          href="https://schedule.nat3z.com/"
-          icon="/open_in_new.svg"
-          tooltip="a schedule management tool for students"
-          tooltipPosition="right"
-          tooltipOffset={{ x: 0, y: 10 }}
-          tooltipTriggerMode="hover"
-        >
-          DynSchedule
-        </DropdownItem>
-
-        <DropdownItem
-          href="https://betterflex.co/"
-          icon="/open_in_new.svg"
-          tooltip="my commercial project, helping with 'flex period' management"
-          tooltipPosition="right"
-          tooltipOffset={{ x: 0, y: 10 }}
-          tooltipTriggerMode="hover"
-        >
-          BetterFlex
-        </DropdownItem>
+        {projects.map((project) => (
+          <DropdownItem
+            href={project.href}
+            icon="/open_in_new.svg"
+            tooltip={project.tagline}
+            tooltipPosition="right"
+            tooltipOffset={{ x: 0, y: 10 }}
+            tooltipTriggerMode="hover"
+          >
+            {project.name}
+          </DropdownItem>
+        ))}
 
         <DropdownItem
           href="https://github.com/nat3z"
@@ -78,14 +58,14 @@ const PROFILE_NAME = "natia";
 
     <DropdownButton triggerMode="click">
       <div slot="trigger">
-        <button> Links ▼ </button>
+        <button>Links ▼</button>
       </div>
 
       <div slot="content" class="py-1">
         <DropdownItem href="https://youtube.com/@nat3zdev" icon="/youtube.svg">
           YouTube
         </DropdownItem>
-        <DropdownItem href="https://x.com/nat3zdev" icon="/twitter.svg">
+        <DropdownItem href="https://x.com/shardevlol" icon="/twitter.svg">
           Twitter/X
         </DropdownItem>
         <DropdownItem
@@ -109,7 +89,7 @@ const PROFILE_NAME = "natia";
   function toggleCrt() {
     window.crtOn = !window.crtOn;
     document.dispatchEvent(
-      new CustomEvent(window.crtOn ? "nat3z:apply-crt" : "nat3z:cancel-crt")
+      new CustomEvent(window.crtOn ? "nat3z:apply-crt" : "nat3z:cancel-crt"),
     );
     const crtToggleButton = document.getElementById("crt-toggle-button");
     if (crtToggleButton) {
