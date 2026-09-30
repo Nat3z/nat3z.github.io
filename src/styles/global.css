@@ -73,25 +73,30 @@
   animation: crt-flicker 0.15s infinite alternate;
 }
 
+/* rolling scan band that sweeps down and back up the screen, only while the crt filter is on */
 @utility crt-scanlines {
-  &::before {
-    content: "";
-    position: fixed;
-    top: -100vh;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(
-      to bottom,
-      transparent 40%,
-      rgba(0, 255, 0, 0.03) 45%,
-      rgba(0, 255, 0, 0.08) 50%,
-      rgba(0, 255, 0, 0.03) 55%,
-      transparent 60%
-    );
-    z-index: 9996;
-    pointer-events: none;
-    animation: crt-scanlines 3s linear infinite;
+  display: none;
+  position: fixed;
+  top: -25vh;
+  left: 0;
+  width: 100vw;
+  height: 25vh;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 0, 0, 0.05) 35%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(0, 0, 0, 0.08) 65%,
+    transparent
+  );
+  z-index: 9997;
+  pointer-events: none;
+  animation: crt-scanlines 7s ease-in-out infinite alternate;
+
+  @media (prefers-reduced-motion: no-preference) {
+    .crt-screen > & {
+      display: block;
+    }
   }
 }
 
@@ -115,6 +120,6 @@
     transform: translateY(0);
   }
   100% {
-    transform: translateY(200vh);
+    transform: translateY(125vh);
   }
 }
